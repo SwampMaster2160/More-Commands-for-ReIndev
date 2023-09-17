@@ -1,0 +1,27 @@
+buildscript {
+	repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io/' }
+    }
+    dependencies {
+        classpath('com.github.Fox2Code.FoxLoader:dev:1.2.17')
+    }
+}
+
+apply plugin: 'foxloader.dev'
+
+version '0.0.0'
+
+foxloader {
+    // forceReload = true
+    modId = "gamerulesforreindev"
+    modName = "Gamerules for ReIndev"
+    modVersion = project.version
+    modDesc = "Adds gamerules to ReIndev"
+    clientMod = "com.swampmaster2160.gamerulesforreindev.GamerulesForReIndevClient"
+    serverMod = "com.swampmaster2160.gamerulesforreindev.GamerulesForReIndevServer"
+    // Development tools don't like that both client and server define
+    // the same classes, so uncomment to disable the side inclusion.
+    // includeClient = false
+    // includeServer = false
+}
