@@ -6,5 +6,17 @@ public class GameRulesForReIndevClient extends GameRulesForReIndev implements Cl
 	@Override
 	public void onInit() {
 		// Client specific code
+
+		// Register commands
+		//PlayerCommandHandler.commands.add(new GameRuleCommand(PlayerCommandHandler.instance));
 	}
+
+	/*@Override
+	public void onPreInit() {
+		// TODO Auto-generated method stub
+		//super.onPreInit();
+		PlayerCommandHandler.commands.add(new GameRuleCommand(PlayerCommandHandler.instance));
+	}*/
+
+	
 }
