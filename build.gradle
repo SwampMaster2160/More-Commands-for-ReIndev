@@ -15,11 +15,11 @@ version '0.0.0'
 foxloader {
     // forceReload = true
     modId = "gamerulesforreindev"
-    modName = "Gamerules for ReIndev"
+    modName = "Game rules for ReIndev"
     modVersion = project.version
-    modDesc = "Adds gamerules to ReIndev"
-    clientMod = "com.swampmaster2160.gamerulesforreindev.GamerulesForReIndevClient"
-    serverMod = "com.swampmaster2160.gamerulesforreindev.GamerulesForReIndevServer"
+    modDesc = "Adds game rules to ReIndev"
+    clientMod = "com.swampmaster2160.gamerulesforreindev.GameRulesForReIndevClient"
+    serverMod = "com.swampmaster2160.gamerulesforreindev.GameRulesForReIndevServer"
     // Development tools don't like that both client and server define
     // the same classes, so uncomment to disable the side inclusion.
     // includeClient = false

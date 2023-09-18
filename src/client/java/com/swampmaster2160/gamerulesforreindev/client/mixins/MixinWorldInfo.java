@@ -6,66 +6,44 @@ import net.minecraft.src.game.nbt.NBTTagCompound;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import com.swampmaster2160.gamerulesforreindev.GameRules;
+
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(WorldInfo.class)
 public class MixinWorldInfo {
-	private int testInt;
+	private GameRules gameRules;
 
-	/*@Inject(method = "WorldInfo", at = @At("HEAD"), cancellable = true)
-	public void WorldInfo(NBTTagCompound nBTTagCompound, CallbackInfoReturnable<WorldInfo> cir) {
-		System.out.println("Hello World A!");
+	public GameRules getGameRules() {
+		return gameRules;
 	}
 
-	@Inject(method = "getNBTTagCompound", at = @At("HEAD"), cancellable = true)
-	public void mixin(CallbackInfoReturnable<NBTTagCompound> cir) {
-		System.out.println("Hello World B!");
-	}*/
-
-	@Inject(method = "<init>", at = @At("TAIL"), cancellable = true)
+	// When loading a world, also load the gamerules if they exist.
+	@Inject(method = "<init>(Lnet/minecraft/src/game/nbt/NBTTagCompound;)V", at = @At("TAIL"), cancellable = true)
 	public void WorldInfo(NBTTagCompound nBTTagCompound, CallbackInfo info) {
-		//this.testInt = 
-		System.out.println("Hello World A!");
-	}
-
-	@Inject(method = "getPlayerNBTTagCompound", at = @At("HEAD"), cancellable = true)
-	public void getPlayerNBTTagCompound(CallbackInfoReturnable<NBTTagCompound> cir) {
-		System.out.println(testInt);
-	}
-
-	/*@Inject(method = "blockActivated", at = @At("HEAD"), cancellable = true)
-	public void onBlockActivated(World world, int x, int y, int z, EntityPlayer player, CallbackInfoReturnable<Boolean> cir) {
-		if (world.getBlockId(x, y - 1, z) == ExampleMod.ratBlock.getRegisteredBlockId()) {
-			int loot = ExampleMod.randomLootId();
-			if (loot != 0) {
-				EntityItem item = new EntityItem(world, player.posX, player.posY, player.posZ, new ItemStack(loot, 1));
-				world.entityJoinedWorld(item);
-			}
-			int i = world.getBlockMetadata(x, y, z);
-			if (i >= 6) {
-				world.setBlockWithNotify(x, y, z, 0);
-			} else {
-				world.setBlockMetadataWithNotify(x, y, z, i + 1);
-				world.markBlockAsNeedsUpdate(x, y, z);
-			}
-			world.playSoundEffect(x + 0.5f, y + 0.5f, z + 0.5f, "random.pop", 1f, 1f);
-			cir.setReturnValue(Boolean.TRUE);
+		System.out.println("A");
+		// Load the world's gamerules it has them.
+		if (nBTTagCompound.hasKey("GameRules")) {
+			this.gameRules = new GameRules(nBTTagCompound.getCompoundTag("GameRules"));
+		}
+		// Else create a deafult gamerule set.
+		else {
+			this.gameRules = new GameRules();
 		}
 	}
 
-	@Override
-	public void onBlockPlaced(World world, int x, int y, int z, int blockFace) {
-		if (!world.multiplayerWorld && world.getBlockId(x, y - 1, z) ==
-				ExampleMod.ratBlock.getRegisteredBlockId()) {
-		int i = world.getBlockMetadata(x, y, z);
-		if (i >= 6) {
-			world.setBlockWithNotify(x, y, z, 0);
-		} else {
-			world.setBlockMetadataWithNotify(x, y, z, i + 1);
-			world.markBlockAsNeedsUpdate(x, y, z);
-		}
-		world.playSoundEffect(x + 0.5f, y + 0.5f, z + 0.5f, "random.pop", 1f, 1f);
-		}
-	}*/
+	// When changing dimensions
+	@Inject(method = "<init>(Lnet/minecraft/src/game/level/WorldInfo;)V", at = @At("TAIL"), cancellable = true)
+	public void WorldInfo(WorldInfo worldInfo, CallbackInfo info) {
+		System.out.println("B");
+		this.gameRules = ((MixinWorldInfo)(Object)worldInfo).gameRules;
+	}
+
+	// When saving a world, save the game rules as a "GameRules" nbt compound tag
+	@Inject(method = "updateTagCompound", at = @At("TAIL"), cancellable = true)
+	private void updateTagCompound(NBTTagCompound nBTTagCompound, NBTTagCompound arg2, CallbackInfo info) {
+		System.out.println("C");
+		nBTTagCompound.setCompoundTag("GameRules", this.gameRules.getNBTTags());
+	}
 }
