@@ -7,15 +7,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.swampmaster2160.gamerulesforreindev.GameRules;
+import com.swampmaster2160.gamerulesforreindev.WorldGameRules;
 
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(WorldInfo.class)
 public class MixinWorldInfo {
-	private GameRules gameRules;
+	private WorldGameRules gameRules;
 
-	public GameRules getGameRules() {
+	public WorldGameRules getGameRules() {
 		return gameRules;
 	}
 
@@ -25,11 +25,11 @@ public class MixinWorldInfo {
 		System.out.println("A");
 		// Load the world's gamerules it has them.
 		if (nBTTagCompound.hasKey("GameRules")) {
-			this.gameRules = new GameRules(nBTTagCompound.getCompoundTag("GameRules"));
+			this.gameRules = new WorldGameRules(nBTTagCompound.getCompoundTag("GameRules"));
 		}
 		// Else create a deafult gamerule set.
 		else {
-			this.gameRules = new GameRules();
+			this.gameRules = new WorldGameRules();
 		}
 	}
 

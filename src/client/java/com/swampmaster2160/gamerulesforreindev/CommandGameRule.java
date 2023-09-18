@@ -6,7 +6,7 @@ import net.minecraft.src.client.player.EntityPlayerSP;
 
 public class CommandGameRule extends Command {
 	public CommandGameRule(PlayerCommandHandler commandHandler) {
-		super("gamerule", true, false, null);
+		super("gamerule", true, false, (String[])null);
 	}
 
 	@Override
