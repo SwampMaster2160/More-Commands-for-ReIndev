@@ -1,11 +1,38 @@
 package com.swampmaster2160.gamerulesforreindev.client.mixins;
 
 import net.minecraft.src.game.level.WorldInfo;
+import net.minecraft.src.game.nbt.NBTTagCompound;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(WorldInfo.class)
 public class MixinWorldInfo {
+	private int testInt;
+
+	/*@Inject(method = "WorldInfo", at = @At("HEAD"), cancellable = true)
+	public void WorldInfo(NBTTagCompound nBTTagCompound, CallbackInfoReturnable<WorldInfo> cir) {
+		System.out.println("Hello World A!");
+	}
+
+	@Inject(method = "getNBTTagCompound", at = @At("HEAD"), cancellable = true)
+	public void mixin(CallbackInfoReturnable<NBTTagCompound> cir) {
+		System.out.println("Hello World B!");
+	}*/
+
+	@Inject(method = "<init>", at = @At("TAIL"), cancellable = true)
+	public void WorldInfo(NBTTagCompound nBTTagCompound, CallbackInfo info) {
+		//this.testInt = 
+		System.out.println("Hello World A!");
+	}
+
+	@Inject(method = "getPlayerNBTTagCompound", at = @At("HEAD"), cancellable = true)
+	public void getPlayerNBTTagCompound(CallbackInfoReturnable<NBTTagCompound> cir) {
+		System.out.println(testInt);
+	}
 
 	/*@Inject(method = "blockActivated", at = @At("HEAD"), cancellable = true)
 	public void onBlockActivated(World world, int x, int y, int z, EntityPlayer player, CallbackInfoReturnable<Boolean> cir) {
