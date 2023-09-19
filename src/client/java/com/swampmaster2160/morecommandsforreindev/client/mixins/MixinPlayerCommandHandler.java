@@ -1,11 +1,11 @@
-package com.swampmaster2160.gamerulesforreindev.client.mixins;
+package com.swampmaster2160.morecommandsforreindev.client.mixins;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.swampmaster2160.gamerulesforreindev.CommandGameRule;
+import com.swampmaster2160.morecommandsforreindev.CommandGameRule;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.mitask.PlayerCommandHandler;

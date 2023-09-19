@@ -1,4 +1,4 @@
-package com.swampmaster2160.gamerulesforreindev.server.mixins;
+package com.swampmaster2160.morecommandsforreindev.server.mixins;
 
 import net.minecraft.src.game.level.WorldInfo;
 

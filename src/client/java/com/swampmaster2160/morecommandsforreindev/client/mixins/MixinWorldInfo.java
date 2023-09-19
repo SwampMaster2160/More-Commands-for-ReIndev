@@ -1,4 +1,4 @@
-package com.swampmaster2160.gamerulesforreindev.client.mixins;
+package com.swampmaster2160.morecommandsforreindev.client.mixins;
 
 import net.minecraft.src.game.level.WorldInfo;
 import net.minecraft.src.game.nbt.NBTTagCompound;
@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.swampmaster2160.gamerulesforreindev.IWorldInfo;
-import com.swampmaster2160.gamerulesforreindev.WorldGameRules;
+import com.swampmaster2160.morecommandsforreindev.IWorldInfo;
+import com.swampmaster2160.morecommandsforreindev.WorldGameRules;
 
 import org.spongepowered.asm.mixin.injection.At;
 

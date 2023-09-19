@@ -1,4 +1,4 @@
-package com.swampmaster2160.gamerulesforreindev;
+package com.swampmaster2160.morecommandsforreindev;
 
 import org.jetbrains.annotations.Nullable;
 
