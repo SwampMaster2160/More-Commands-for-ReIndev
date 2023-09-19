@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.mitask.PlayerCommandHandler;
 
 @Mixin(PlayerCommandHandler.class)
-public class MixinPlayerCommandHandler {
+public abstract class MixinPlayerCommandHandler {
 	// Add registering the ramerule command.
 	@Inject(method = "registerCommands", at = @At("TAIL"), cancellable = true)
 	private void registerCommands(Minecraft mc, CallbackInfo info) {

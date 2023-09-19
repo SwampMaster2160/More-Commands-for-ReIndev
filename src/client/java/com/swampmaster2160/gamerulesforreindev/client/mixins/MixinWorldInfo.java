@@ -7,12 +7,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.swampmaster2160.gamerulesforreindev.IWorldInfo;
 import com.swampmaster2160.gamerulesforreindev.WorldGameRules;
 
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(WorldInfo.class)
-public class MixinWorldInfo {
+public abstract class MixinWorldInfo implements IWorldInfo {
 	private WorldGameRules gameRules;
 
 	public WorldGameRules getGameRules() {
