@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.swampmaster2160.morecommandsforreindev.CommandGameRule;
+import com.swampmaster2160.morecommandsforreindev.commands.CommandWorldInfo;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.mitask.PlayerCommandHandler;
@@ -15,6 +15,6 @@ public abstract class MixinPlayerCommandHandler {
 	// Add registering the ramerule command.
 	@Inject(method = "registerCommands", at = @At("TAIL"), cancellable = true)
 	private void registerCommands(Minecraft mc, CallbackInfo info) {
-		((PlayerCommandHandler)(Object)this).addCommand(new CommandGameRule(((PlayerCommandHandler)(Object)this)));
+		((PlayerCommandHandler)(Object)this).addCommand(new CommandWorldInfo(((PlayerCommandHandler)(Object)this)));
 	}
 }

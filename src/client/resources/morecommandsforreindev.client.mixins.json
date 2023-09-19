@@ -4,7 +4,6 @@
   "package": "com.swampmaster2160.morecommandsforreindev.client.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinWorldInfo",
     "MixinPlayerCommandHandler"
   ]
 }
