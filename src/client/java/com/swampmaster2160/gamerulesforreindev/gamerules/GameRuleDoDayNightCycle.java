@@ -4,9 +4,9 @@ import org.jetbrains.annotations.Nullable;
 
 import com.swampmaster2160.gamerulesforreindev.GameRule;
 
-public class GameRuleKeepInventory extends GameRule {
-	public GameRuleKeepInventory() {
-		super(boolean.class, false);
+public class GameRuleDoDayNightCycle extends GameRule {
+	public GameRuleDoDayNightCycle() {
+		super(boolean.class, true);
 	}
 
 	@Override

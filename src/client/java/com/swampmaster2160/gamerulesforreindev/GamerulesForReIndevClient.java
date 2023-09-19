@@ -1,7 +1,7 @@
 package com.swampmaster2160.gamerulesforreindev;
 
 import com.fox2code.foxloader.loader.ClientMod;
-import com.swampmaster2160.gamerulesforreindev.gamerules.GameRuleKeepInventory;
+import com.swampmaster2160.gamerulesforreindev.gamerules.GameRuleDoDayNightCycle;
 
 public class GameRulesForReIndevClient extends GameRulesForReIndev implements ClientMod {
 	@Override
@@ -9,6 +9,6 @@ public class GameRulesForReIndevClient extends GameRulesForReIndev implements Cl
 		// Client specific code
 
 		// Register game rules
-		GameRule.registerGameRule("keepInventory", new GameRuleKeepInventory());
+		GameRule.registerGameRule("doDayNightCycle", new GameRuleDoDayNightCycle());
 	}
 }
