@@ -46,18 +46,21 @@ public class WorldGameRules {
 		// Get game rule datatype
 		Class<?> dataType = gameRule.dataType;
 		// Set game rule value
-		if (value == gameRule.defaultValue) rules.removeTag(name);
-		if (dataType == Boolean.class) rules.setBoolean(name, (boolean)value);
-		if (dataType == Byte.class) rules.setByte(name, (byte)value);
-		if (dataType == Short.class) rules.setShort(name, (short)value);
-		if (dataType == Integer.class) rules.setInteger(name, (int)value);
-		if (dataType == Long.class) rules.setLong(name, (long)value);
-		if (dataType == Float.class) rules.setFloat(name, (float)value);
-		if (dataType == Double.class) rules.setDouble(name, (double)value);
+		if (value == gameRule.defaultValue) {
+			rules.removeTag(name);
+			return true;
+		}
+		if (dataType == boolean.class) rules.setBoolean(name, (boolean)value);
+		if (dataType == byte.class) rules.setByte(name, (byte)value);
+		if (dataType == short.class) rules.setShort(name, (short)value);
+		if (dataType == int.class) rules.setInteger(name, (int)value);
+		if (dataType == long.class) rules.setLong(name, (long)value);
+		if (dataType == float.class) rules.setFloat(name, (float)value);
+		if (dataType == double.class) rules.setDouble(name, (double)value);
 		if (dataType == String.class) rules.setString(name, (String)value);
-		if (dataType == Byte[].class) rules.setByteArray(name, (byte[])value);
-		if (dataType == Integer[].class) rules.setIntArray(name, (int[])value);
-		if (dataType == NBTTagCompound.class) rules.setCompoundTag(name, (NBTTagCompound)value);
+		if (dataType == byte[].class) rules.setByteArray(name, (byte[])value);
+		if (dataType == int[].class) rules.setIntArray(name, (int[])value);
+		if (dataType == NBTTagCompound.class) rules.setCompoundTag(name, (NBTTagCompound)value);		
 		return true;
 	}
 }

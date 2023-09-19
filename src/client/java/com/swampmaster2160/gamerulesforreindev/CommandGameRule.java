@@ -42,6 +42,10 @@ public class CommandGameRule extends Command {
 			return;
 		}
 		worldGameRules.setGameRuleValue(gameRuleName, newValueParsed);
+		String gameRuleSetText = StatCollector.translateToLocal("command.gamerule.set")
+			.replace("%g", gameRuleName)
+			.replace("%v", "" + newValueParsed);
+		commandExecutor.addChatMessage(gameRuleSetText);
 	}
 
 	@Override

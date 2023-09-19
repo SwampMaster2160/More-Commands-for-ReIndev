@@ -6,7 +6,7 @@ import com.swampmaster2160.gamerulesforreindev.GameRule;
 
 public class GameRuleKeepInventory extends GameRule {
 	public GameRuleKeepInventory() {
-		super(boolean.class, true);
+		super(boolean.class, false);
 	}
 
 	@Override

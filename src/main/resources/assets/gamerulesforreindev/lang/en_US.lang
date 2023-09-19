@@ -1,3 +1,4 @@
 command.gamerule.current_value: Current value
 command.gamerule.invalid: Invalid game rule
 command.gamerule.invalid_value: Invalid value for that game rule
+command.gamerule.set: Set the game rule %g to %v
