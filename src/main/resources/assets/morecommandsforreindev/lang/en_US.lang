@@ -1,0 +1,4 @@
+command.worldinfo.invalid: Invalid world info variable
+command.worldinfo.current_value: Current value
+command.worldinfo.invalid_value: Invalid value
+command.worldinfo.set: Set world info variable %n to %v
