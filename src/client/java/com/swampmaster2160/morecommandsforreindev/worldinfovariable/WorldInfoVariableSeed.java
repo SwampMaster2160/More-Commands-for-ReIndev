@@ -1,5 +1,6 @@
 package com.swampmaster2160.morecommandsforreindev.worldinfovariable;
 
+import com.swampmaster2160.morecommandsforreindev.IWorld;
 import com.swampmaster2160.morecommandsforreindev.IWorldInfo;
 import com.swampmaster2160.morecommandsforreindev.WorldInfoVariable;
 
@@ -24,6 +25,7 @@ public class WorldInfoVariableSeed extends WorldInfoVariable {
 		// Set seed
 		IWorldInfo worldInfo = ((IWorldInfo)world.worldInfo);
 		worldInfo.setRandomSeed(seed);
+		((IWorld)world).reCalculateChunkProvider();
 		return true;
 	}
 }

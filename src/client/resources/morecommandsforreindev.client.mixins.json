@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinPlayerCommandHandler",
-    "MixinWorldInfo"
+    "MixinWorldInfo",
+    "MixinWorld"
   ]
 }
