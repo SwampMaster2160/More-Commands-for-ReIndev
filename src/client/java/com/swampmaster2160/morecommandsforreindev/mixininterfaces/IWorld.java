@@ -1,4 +1,4 @@
-package com.swampmaster2160.morecommandsforreindev;
+package com.swampmaster2160.morecommandsforreindev.mixininterfaces;
 
 import net.minecraft.src.game.level.chunk.IChunkProvider;
 

@@ -1,29 +1,18 @@
 package com.swampmaster2160.morecommandsforreindev.worldinfovariable;
 
-import com.swampmaster2160.morecommandsforreindev.IWorld;
-import com.swampmaster2160.morecommandsforreindev.WorldInfoVariable;
+import com.swampmaster2160.morecommandsforreindev.mixininterfaces.IWorld;
 
 import net.minecraft.src.game.level.World;
 
-public class WorldInfoVariableGenerator extends WorldInfoVariable {
+public class WorldInfoVariableGenerator extends WorldInfoVariableInt {
 	@Override
-	public String getValueAsString(World world) {
-		return "" + world.getWorldInfo().getGenType();
+	public int getValue(World world) {
+		return world.getWorldInfo().getGenType();
 	}
 
 	@Override
-	public boolean setValueAsString(World world, String value) {
-		// Get generator type from string
-		int generatorType = 0;
-		try {
-			generatorType = Integer.parseInt(value);
-		}
-		catch (NumberFormatException e) {
-			return false;
-		}
-		// Set generator type
-		world.getWorldInfo().setGenType(generatorType);
+	public void setValue(World world, int value) {
+		world.getWorldInfo().setGenType(value);
 		((IWorld)world).reCalculateChunkProvider();
-		return true;
 	}
 }

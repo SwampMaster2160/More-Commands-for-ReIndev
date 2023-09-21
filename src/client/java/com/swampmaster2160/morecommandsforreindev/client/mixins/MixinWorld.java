@@ -2,7 +2,7 @@ package com.swampmaster2160.morecommandsforreindev.client.mixins;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-import com.swampmaster2160.morecommandsforreindev.IWorld;
+import com.swampmaster2160.morecommandsforreindev.mixininterfaces.IWorld;
 
 import net.minecraft.src.game.level.World;
 import net.minecraft.src.game.level.chunk.ChunkProvider;
