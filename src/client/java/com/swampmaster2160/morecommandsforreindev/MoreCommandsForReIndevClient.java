@@ -4,11 +4,13 @@ import com.fox2code.foxloader.loader.ClientMod;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableDimension;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableFeatures;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableGenerator;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableRaining;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSeed;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSizeOnDisk;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSpawnX;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSpawnY;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSpawnZ;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableThundering;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableWorldTime;
 
 public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev implements ClientMod {
@@ -26,5 +28,7 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		WorldInfoVariable.registerVariable("worldTime", new WorldInfoVariableWorldTime(), new String[] {"wt"});
 		WorldInfoVariable.registerVariable("sizeOnDisk", new WorldInfoVariableSizeOnDisk(), new String[] {"sd"});
 		WorldInfoVariable.registerVariable("dimension", new WorldInfoVariableDimension(), new String[] {"d"});
+		WorldInfoVariable.registerVariable("raining", new WorldInfoVariableRaining(), new String[] {"r"});
+		WorldInfoVariable.registerVariable("thundering", new WorldInfoVariableThundering(), new String[] {"t"});
 	}
 }
