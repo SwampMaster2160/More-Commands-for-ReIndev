@@ -1,6 +1,7 @@
 package com.swampmaster2160.morecommandsforreindev;
 
 import com.fox2code.foxloader.loader.ClientMod;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableCheats;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableDimension;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableFeatures;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableGameType;
@@ -38,5 +39,6 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		WorldInfoVariable.registerVariable("thunderTime", new WorldInfoVariableThunderTime(), new String[] {"tt"});
 		WorldInfoVariable.registerVariable("gameType", new WorldInfoVariableGameType(), new String[] {"gt"});
 		WorldInfoVariable.registerVariable("saveVersion", new WorldInfoVariableSaveVersion(), new String[] {"sv"});
+		WorldInfoVariable.registerVariable("cheats", new WorldInfoVariableCheats(), new String[] {"c"});
 	}
 }

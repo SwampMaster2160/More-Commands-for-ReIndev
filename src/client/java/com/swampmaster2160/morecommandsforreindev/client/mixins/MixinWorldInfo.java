@@ -11,6 +11,7 @@ public abstract class MixinWorldInfo implements IWorldInfo {
 	public long randomSeed;
 	public boolean mapFeaturesEnabled;
 	public int dimension;
+	public boolean hardcore;
 
 	@Override
 	public void setRandomSeed(long seed) {
@@ -25,5 +26,10 @@ public abstract class MixinWorldInfo implements IWorldInfo {
 	@Override
 	public void setDimension(int dimension) {
 		this.dimension = dimension;
+	}
+
+	@Override
+	public void setHardcoreEnabled(boolean enabled) {
+		this.hardcore = enabled;
 	}
 }
