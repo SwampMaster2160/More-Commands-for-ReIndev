@@ -7,8 +7,12 @@ import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVar
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableGameType;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableGenerator;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableHardcore;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableHighestChunkNether;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableHighestChunkOverworld;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableHighscore;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableLastTimePlayed;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableLowestChunkNether;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableLowestChunkOverworld;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableRainTime;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableRaining;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSaveVersion;
@@ -19,6 +23,7 @@ import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVar
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSpawnZ;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableThunderTime;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableThundering;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableWorldName;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableWorldTime;
 
 public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev implements ClientMod {
@@ -46,5 +51,10 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		WorldInfoVariable.registerVariable("hardcore", new WorldInfoVariableHardcore(), new String[] {"h"});
 		WorldInfoVariable.registerVariable("lastTimePlayed", new WorldInfoVariableLastTimePlayed(), new String[] {"ltp"});
 		WorldInfoVariable.registerVariable("highscore", new WorldInfoVariableHighscore(), new String[] {"hs"});
+		WorldInfoVariable.registerVariable("highestChunkOverworld", new WorldInfoVariableHighestChunkOverworld(), new String[] {"hco"});
+		WorldInfoVariable.registerVariable("highestChunkNether", new WorldInfoVariableHighestChunkNether(), new String[] {"hcn"});
+		WorldInfoVariable.registerVariable("lowestChunkOverworld", new WorldInfoVariableLowestChunkOverworld(), new String[] {"lco"});
+		WorldInfoVariable.registerVariable("lowestChunkNether", new WorldInfoVariableLowestChunkNether(), new String[] {"lcn"});
+		WorldInfoVariable.registerVariable("worldName", new WorldInfoVariableWorldName(), new String[] {"wn"});
 	}
 }

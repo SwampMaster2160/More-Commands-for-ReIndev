@@ -16,6 +16,6 @@ public abstract class MixinWorld implements IWorld {
 	public void reCalculateChunkProvider() {
 		((World)(Object)this).saveWorld(true, null);
 		IChunkLoader chunkloader = ((World)(Object)this).func_40479_y().getChunkLoader(((World)(Object)this).worldProvider);
-        this.chunkProvider = new ChunkProvider(((World)(Object)this), chunkloader, ((World)(Object)this).worldProvider.getChunkProvider());
+		this.chunkProvider = new ChunkProvider(((World)(Object)this), chunkloader, ((World)(Object)this).worldProvider.getChunkProvider());
 	}
 }

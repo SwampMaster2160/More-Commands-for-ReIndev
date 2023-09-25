@@ -13,6 +13,10 @@ public abstract class MixinWorldInfo implements IWorldInfo {
 	public int dimension;
 	public boolean hardcore;
 	public long lastTimePlayed;
+	public short highestChunkOW;
+	public short highestChunkNether;
+	public short lowestChunkOW;
+	public short lowestChunkNether;
 
 	@Override
 	public void setRandomSeed(long seed) {
