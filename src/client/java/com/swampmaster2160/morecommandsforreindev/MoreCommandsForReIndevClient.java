@@ -3,13 +3,17 @@ package com.swampmaster2160.morecommandsforreindev;
 import com.fox2code.foxloader.loader.ClientMod;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableDimension;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableFeatures;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableGameType;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableGenerator;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableRainTime;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableRaining;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSaveVersion;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSeed;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSizeOnDisk;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSpawnX;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSpawnY;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSpawnZ;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableThunderTime;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableThundering;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableWorldTime;
 
@@ -30,5 +34,9 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		WorldInfoVariable.registerVariable("dimension", new WorldInfoVariableDimension(), new String[] {"d"});
 		WorldInfoVariable.registerVariable("raining", new WorldInfoVariableRaining(), new String[] {"r"});
 		WorldInfoVariable.registerVariable("thundering", new WorldInfoVariableThundering(), new String[] {"t"});
+		WorldInfoVariable.registerVariable("rainTime", new WorldInfoVariableRainTime(), new String[] {"rt"});
+		WorldInfoVariable.registerVariable("thunderTime", new WorldInfoVariableThunderTime(), new String[] {"tt"});
+		WorldInfoVariable.registerVariable("gameType", new WorldInfoVariableGameType(), new String[] {"gt"});
+		WorldInfoVariable.registerVariable("saveVersion", new WorldInfoVariableSaveVersion(), new String[] {"sv"});
 	}
 }
