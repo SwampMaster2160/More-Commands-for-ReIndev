@@ -6,6 +6,9 @@ import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVar
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableFeatures;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableGameType;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableGenerator;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableHardcore;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableHighscore;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableLastTimePlayed;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableRainTime;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableRaining;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSaveVersion;
@@ -40,5 +43,8 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		WorldInfoVariable.registerVariable("gameType", new WorldInfoVariableGameType(), new String[] {"gt"});
 		WorldInfoVariable.registerVariable("saveVersion", new WorldInfoVariableSaveVersion(), new String[] {"sv"});
 		WorldInfoVariable.registerVariable("cheats", new WorldInfoVariableCheats(), new String[] {"c"});
+		WorldInfoVariable.registerVariable("hardcore", new WorldInfoVariableHardcore(), new String[] {"h"});
+		WorldInfoVariable.registerVariable("lastTimePlayed", new WorldInfoVariableLastTimePlayed(), new String[] {"ltp"});
+		WorldInfoVariable.registerVariable("highscore", new WorldInfoVariableHighscore(), new String[] {"hs"});
 	}
 }
