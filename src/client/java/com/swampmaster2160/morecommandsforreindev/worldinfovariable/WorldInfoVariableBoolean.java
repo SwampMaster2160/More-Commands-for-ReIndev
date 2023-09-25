@@ -14,9 +14,10 @@ public abstract class WorldInfoVariableBoolean extends WorldInfoVariable {
 	}
 
 	@Override
-	public boolean setValueAsString(World world, String value) {
+	public boolean setValueAsString(World world, String[] valueWords) {
 		// Get value type from string
-		@Nullable Boolean booleabValue = MoreCommandsForReIndev.parseBool(value);
+		if (valueWords.length > 1) return false;
+		@Nullable Boolean booleabValue = MoreCommandsForReIndev.parseBool(valueWords[0]);
 		if (booleabValue == null) return false;
 		// Set value
 		setValue(world, booleabValue);

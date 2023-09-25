@@ -36,5 +36,5 @@ public abstract class WorldInfoVariable {
 	}
 
 	public abstract String getValueAsString(World world);
-	public abstract boolean setValueAsString(World world, String value);
+	public abstract boolean setValueAsString(World world, String[] valueWords);
 }

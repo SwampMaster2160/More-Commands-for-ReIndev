@@ -18,8 +18,8 @@ public class CommandWorldInfo extends Command {
 
 	@Override
 	public void onExecute(String[] args, EntityPlayerSP commandExecutor) {
-		// If the command does not have 2 or 3 arguments, print the usage message.
-		if (args.length != 2 && args.length != 3) {
+		// If the command only has 1 argument, print the usage message.
+		if (args.length < 2) {
 			CommandErrorHandler.commandUsageMessage(this.commandSyntax(), commandExecutor);
 			return;
 		}
@@ -40,9 +40,14 @@ public class CommandWorldInfo extends Command {
 			return;
 		}
 		// Set the value of the variable
-		String newValueString = args[2];
+		//String newValueString = args[2];
 		World world = commandExecutor.worldObj;
-		boolean isSuccessful = worldInfoVariable.setValueAsString(world, newValueString);
+		int newValueStringsCount = args.length - 2;
+		String[] newValueStrings = new String[newValueStringsCount];
+		for (int x = 0; x < newValueStringsCount; x++) {
+			newValueStrings[x] = args[x + 2];
+		}
+		boolean isSuccessful = worldInfoVariable.setValueAsString(world, newValueStrings);
 		// If failed then print the error messabe
 		if (!isSuccessful) {
 			String errorText = "\u00a7c" + StatCollector.translateToLocal("command.worldinfo.invalid_value");

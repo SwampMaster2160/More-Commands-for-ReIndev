@@ -4,19 +4,16 @@ import com.swampmaster2160.morecommandsforreindev.WorldInfoVariable;
 
 import net.minecraft.src.game.level.World;
 
-public abstract class WorldInfoVariableString extends WorldInfoVariable {
+public class WorldInfoVariableSpawnPos extends WorldInfoVariable {
 	@Override
 	public String getValueAsString(World world) {
-		return getValue(world);
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getValueAsString'");
 	}
 
 	@Override
 	public boolean setValueAsString(World world, String[] valueWords) {
-		if (valueWords.length > 1) return false;
-		setValue(world, valueWords[0]);
-		return true;
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'setValueAsString'");
 	}
-
-	public abstract String getValue(World world);
-	public abstract void setValue(World world, String value);
 }

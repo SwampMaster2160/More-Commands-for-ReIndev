@@ -11,11 +11,12 @@ public abstract class WorldInfoVariableShort extends WorldInfoVariable {
 	}
 
 	@Override
-	public boolean setValueAsString(World world, String value) {
+	public boolean setValueAsString(World world, String[] valueWords) {
 		// Get value from string
+		if (valueWords.length > 1) return false;
 		short shortValue = 0;
 		try {
-			shortValue = Short.parseShort(value);
+			shortValue = Short.parseShort(valueWords[0]);
 		}
 		catch (NumberFormatException e) {
 			return false;

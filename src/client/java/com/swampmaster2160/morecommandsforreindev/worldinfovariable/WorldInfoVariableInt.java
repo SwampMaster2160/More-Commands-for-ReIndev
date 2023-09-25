@@ -10,11 +10,12 @@ public abstract class WorldInfoVariableInt extends WorldInfoVariable {
 	}
 
 	@Override
-	public boolean setValueAsString(World world, String value) {
+	public boolean setValueAsString(World world, String[] valueWords) {
 		// Get value from string
+		if (valueWords.length > 1) return false;
 		int intValue = 0;
 		try {
-			intValue = Integer.parseInt(value);
+			intValue = Integer.parseInt(valueWords[0]);
 		}
 		catch (NumberFormatException e) {
 			return false;
