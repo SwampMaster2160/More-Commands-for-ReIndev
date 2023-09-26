@@ -23,8 +23,19 @@ public class CommandWorldInfo extends Command {
 			CommandErrorHandler.commandUsageMessage(this.commandSyntax(), commandExecutor);
 			return;
 		}
-		// Get the variable class
 		String worldInfoVariableName = args[1];
+		// If list or help was entered as a variable name
+		if (worldInfoVariableName.equals("list") || worldInfoVariableName.equals("help")) {
+			String messageHeader = "\u00a7e" + StatCollector.translateToLocal("command.worldinfo.variable_list") + "\u00a7r:";
+			commandExecutor.addChatMessage(messageHeader);
+			String[] variableList = WorldInfoVariable.getDisplayNames();
+			for (String variableName: variableList) {
+				String message = "- " + StatCollector.translateToLocal("command.worldinfo.variable") + ": \u00a7e" + variableName;
+				commandExecutor.addChatMessage(message);
+			}
+			return;
+		}
+		// Get the variable class
 		@Nullable WorldInfoVariable worldInfoVariable = WorldInfoVariable.getVariable(worldInfoVariableName);
 		// Print an error is there is no variable with that name
 		if (worldInfoVariable == null) {
@@ -69,6 +80,6 @@ public class CommandWorldInfo extends Command {
 
 	@Override
 	public String commandSyntax() {
-		return "\u00a7e/worldinfo <var> <value>";
+		return "\u00a7e/worldinfo <var|list> [value]";
 	}
 }
