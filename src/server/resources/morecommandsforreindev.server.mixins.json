@@ -4,6 +4,6 @@
   "package": "com.fox2code.examplemod.server.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinWorldInfo"
+    
   ]
 }

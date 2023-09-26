@@ -6,6 +6,5 @@ public class MoreCommandsForReIndevServer extends MoreCommandsForReIndev impleme
 	@Override
 	public void onInit() {
 		// Server specific code
-		
 	}
 }

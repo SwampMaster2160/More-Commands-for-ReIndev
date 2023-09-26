@@ -1,7 +1,7 @@
-command.worldinfo.invalid: Invalid world info variable
-command.worldinfo.current_value: Current value
-command.worldinfo.invalid_value: Invalid value
+command.worldinfo.invalid: §cInvalid world info variable
+command.worldinfo.current_value: §aCurrent value: §e%v
+command.worldinfo.invalid_value: §cInvalid value
 command.worldinfo.set: Set world info variable %n to %v
-command.worldinfo: §dSet or get a world variable such a the seed while ingame.
-command.worldinfo.variable: Variable Name
-command.worldinfo.variable_list: Variable List
+command.worldinfo: §dSet or get a world variable such as the seed while ingame.
+command.worldinfo.variable: - Variable Name: §e%n
+command.worldinfo.variable_list: §eVariable List§r:

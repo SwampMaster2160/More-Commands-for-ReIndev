@@ -26,11 +26,12 @@ public class CommandWorldInfo extends Command {
 		String worldInfoVariableName = args[1];
 		// If list or help was entered as a variable name
 		if (worldInfoVariableName.equals("list") || worldInfoVariableName.equals("help")) {
-			String messageHeader = "\u00a7e" + StatCollector.translateToLocal("command.worldinfo.variable_list") + "\u00a7r:";
+			String messageHeader = StatCollector.translateToLocal("command.worldinfo.variable_list");
 			commandExecutor.addChatMessage(messageHeader);
 			String[] variableList = WorldInfoVariable.getDisplayNames();
 			for (String variableName: variableList) {
-				String message = "- " + StatCollector.translateToLocal("command.worldinfo.variable") + ": \u00a7e" + variableName;
+				String message = StatCollector.translateToLocal("command.worldinfo.variable")
+					.replace("%n", variableName);
 				commandExecutor.addChatMessage(message);
 			}
 			return;
@@ -39,15 +40,16 @@ public class CommandWorldInfo extends Command {
 		@Nullable WorldInfoVariable worldInfoVariable = WorldInfoVariable.getVariable(worldInfoVariableName);
 		// Print an error is there is no variable with that name
 		if (worldInfoVariable == null) {
-			String errorText = "\u00a7c" + StatCollector.translateToLocal("command.worldinfo.invalid");
-			commandExecutor.addChatMessage(errorText);
+			String errorMessage = StatCollector.translateToLocal("command.worldinfo.invalid");
+			commandExecutor.addChatMessage(errorMessage);
 			return;
 		}
 		// If only 2 arguments are given, print the current value of the variable.
 		if (args.length == 2) {
 			String value = worldInfoVariable.getValueAsString(commandExecutor.worldObj);
-			String output = "\u00a7a" + StatCollector.translateToLocal("command.worldinfo.current_value") + ": " + "\u00a7e" +  value;
-			commandExecutor.addChatMessage(output);
+			String message = StatCollector.translateToLocal("command.worldinfo.current_value")
+				.replace("%v", value);
+			commandExecutor.addChatMessage(message);
 			return;
 		}
 		// Set the value of the variable
@@ -61,16 +63,16 @@ public class CommandWorldInfo extends Command {
 		boolean isSuccessful = worldInfoVariable.setValueAsString(world, newValueStrings);
 		// If failed then print the error messabe
 		if (!isSuccessful) {
-			String errorText = "\u00a7c" + StatCollector.translateToLocal("command.worldinfo.invalid_value");
-			commandExecutor.addChatMessage(errorText);
+			String errorMessage = StatCollector.translateToLocal("command.worldinfo.invalid_value");
+			commandExecutor.addChatMessage(errorMessage);
 			return;
 		}
 		// Print success message
 		String newValue = worldInfoVariable.getValueAsString(world);
-		String output = StatCollector.translateToLocal("command.worldinfo.set")
+		String message = StatCollector.translateToLocal("command.worldinfo.set")
 			.replace("%n", worldInfoVariable.displayName)
 			.replace("%v", newValue);
-		commandExecutor.addChatMessage(output);
+		commandExecutor.addChatMessage(message);
 	}
 
 	@Override
