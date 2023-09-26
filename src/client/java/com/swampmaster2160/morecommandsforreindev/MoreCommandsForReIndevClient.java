@@ -18,6 +18,7 @@ import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVar
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSaveVersion;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSeed;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSizeOnDisk;
+import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSpawnPos;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSpawnX;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSpawnY;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableSpawnZ;
@@ -56,5 +57,6 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		WorldInfoVariable.registerVariable("lowestChunkOverworld", new WorldInfoVariableLowestChunkOverworld(), new String[] {"lco"});
 		WorldInfoVariable.registerVariable("lowestChunkNether", new WorldInfoVariableLowestChunkNether(), new String[] {"lcn"});
 		WorldInfoVariable.registerVariable("worldName", new WorldInfoVariableWorldName(), new String[] {"wn"});
+		WorldInfoVariable.registerVariable("spawnPos", new WorldInfoVariableSpawnPos(), new String[] {"sp"});
 	}
 }
