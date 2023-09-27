@@ -70,14 +70,14 @@ public class CommandWorldInfo extends Command {
 		// Print success message
 		String newValue = worldInfoVariable.getValueAsString(world);
 		String message = StatCollector.translateToLocal("command.worldinfo.set")
-			.replace("%n", worldInfoVariable.displayName)
+			.replace("%n", worldInfoVariable.getDisplayName())
 			.replace("%v", newValue);
 		commandExecutor.addChatMessage(message);
 	}
 
 	@Override
 	public void printHelpInformation(EntityPlayerSP var1) {
-		// TODO
+		
 	}
 
 	@Override

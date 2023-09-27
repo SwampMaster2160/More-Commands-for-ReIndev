@@ -5,3 +5,5 @@ command.worldinfo.set: Set world info variable %n to %v
 command.worldinfo: §dSet or get a world variable such as the seed while ingame.
 command.worldinfo.variable: - Variable Name: §e%n
 command.worldinfo.variable_list: §eVariable List§r:
+command.seed.value: Seed: %v
+command.seed: §dGet the world seed.

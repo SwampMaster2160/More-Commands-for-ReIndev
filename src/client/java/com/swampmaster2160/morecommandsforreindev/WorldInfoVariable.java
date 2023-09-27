@@ -34,7 +34,11 @@ public abstract class WorldInfoVariable {
 		return variableDisplayNames.toArray(new String[] {});
 	}
 
-	public String displayName;
+	private String displayName;
+
+	public String getDisplayName() {
+		return displayName;
+	}
 
 	public WorldInfoVariable() {
 		
