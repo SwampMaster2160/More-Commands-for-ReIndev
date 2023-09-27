@@ -7,3 +7,5 @@ command.worldinfo.variable: - Variable Name: §e%n
 command.worldinfo.variable_list: §eVariable List§r:
 command.seed.value: Seed: %v
 command.seed: §dGet the world seed.
+command.setworldspawn: §dSet the world spawn point.
+command.setworldspawn.set: Set the world spawn to (%x, %y, %z).

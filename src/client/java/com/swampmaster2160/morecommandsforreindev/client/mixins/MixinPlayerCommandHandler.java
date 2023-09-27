@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.swampmaster2160.morecommandsforreindev.commands.CommandSeed;
+import com.swampmaster2160.morecommandsforreindev.commands.CommandSetWorldSpawn;
 import com.swampmaster2160.morecommandsforreindev.commands.CommandWorldInfo;
 
 import net.minecraft.client.Minecraft;
@@ -18,5 +19,6 @@ public abstract class MixinPlayerCommandHandler {
 	private void registerCommands(Minecraft mc, CallbackInfo info) {
 		((PlayerCommandHandler)(Object)this).addCommand(new CommandWorldInfo(((PlayerCommandHandler)(Object)this)));
 		((PlayerCommandHandler)(Object)this).addCommand(new CommandSeed(((PlayerCommandHandler)(Object)this)));
+		((PlayerCommandHandler)(Object)this).addCommand(new CommandSetWorldSpawn(((PlayerCommandHandler)(Object)this)));
 	}
 }
