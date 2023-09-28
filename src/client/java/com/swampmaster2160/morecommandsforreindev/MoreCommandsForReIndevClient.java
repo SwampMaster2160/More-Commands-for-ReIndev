@@ -3,6 +3,7 @@ package com.swampmaster2160.morecommandsforreindev;
 import org.jetbrains.annotations.Nullable;
 
 import com.fox2code.foxloader.loader.ClientMod;
+import com.swampmaster2160.morecommandsforreindev.commands.CommandSummon;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableCheats;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableDimension;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableFeatures;
@@ -60,6 +61,11 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		WorldInfoVariable.registerVariable("lowestChunkNether", new WorldInfoVariableLowestChunkNether(), new String[] {"lcn"});
 		WorldInfoVariable.registerVariable("worldName", new WorldInfoVariableWorldName(), new String[] {"wn"});
 		WorldInfoVariable.registerVariable("spawnPos", new WorldInfoVariableSpawnPos(), new String[] {"sp"});
+		// A list of items that cannot be summoned without crashing the game unless extra data is supplied to the entity
+		CommandSummon.addBadEnitity(1, "Item");
+		CommandSummon.addBadEnitity(3, "FireResistantItem");
+		CommandSummon.addBadEnitity(9, "Painting");
+		CommandSummon.addBadEnitity(13, "SplashPotion");
 	}
 
 	public static @Nullable Integer parseIntCoordinate(String argument, int commandExecutorCoordinate) {
@@ -72,6 +78,22 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		}
 		try {
 			return out + Integer.parseInt(argument);
+		}
+		catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
+	public static @Nullable Double parseDoubleCoordinate(String argument, double commandExecutorCoordinate) {
+		if (argument.isEmpty()) return null;
+		double out = 0;
+		if (argument.startsWith("~")) {
+			argument = argument.substring(1);
+			if (argument.isEmpty()) return commandExecutorCoordinate;
+			out = commandExecutorCoordinate;
+		}
+		try {
+			return out + Double.parseDouble(argument);
 		}
 		catch (NumberFormatException e) {
 			return null;
