@@ -14,10 +14,12 @@ public class CommandToggleDownFall extends Command {
 
 	@Override
 	public void onExecute(String[] args, EntityPlayerSP commandExecutor) {
+		// The command should not have any arguments
 		if (args.length != 1) {
 			CommandErrorHandler.commandUsageMessage(this.commandSyntax(), commandExecutor);
 			return;
 		}
+		// Toggle downfall
 		WorldInfo worldInfo = commandExecutor.worldObj.getWorldInfo();
 		worldInfo.setRaining(!worldInfo.getRaining());
 		String message = StatCollector.translateToLocal("command.toggledownfall.toggle");
@@ -26,7 +28,7 @@ public class CommandToggleDownFall extends Command {
 
 	@Override
 	public void printHelpInformation(EntityPlayerSP var1) {
-		
+		// Prints usage and help by default
 	}
 
 	@Override

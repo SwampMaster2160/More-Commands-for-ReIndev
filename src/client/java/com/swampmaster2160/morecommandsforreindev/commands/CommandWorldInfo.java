@@ -53,7 +53,6 @@ public class CommandWorldInfo extends Command {
 			return;
 		}
 		// Set the value of the variable
-		//String newValueString = args[2];
 		World world = commandExecutor.worldObj;
 		int newValueStringsCount = args.length - 2;
 		String[] newValueStrings = new String[newValueStringsCount];
@@ -77,7 +76,7 @@ public class CommandWorldInfo extends Command {
 
 	@Override
 	public void printHelpInformation(EntityPlayerSP var1) {
-		
+		// Prints usage and help by default
 	}
 
 	@Override

@@ -95,7 +95,7 @@ public class CommandSummon extends Command {
 
 	@Override
 	public void printHelpInformation(EntityPlayerSP var1) {
-		
+		// Prints usage and help by default
 	}
 
 	@Override
