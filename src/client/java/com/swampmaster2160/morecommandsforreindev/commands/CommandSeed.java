@@ -13,10 +13,12 @@ public class CommandSeed extends Command {
 
 	@Override
 	public void onExecute(String[] args, EntityPlayerSP commandExecutor) {
+		// The command should not have any arguments
 		if (args.length != 1) {
 			CommandErrorHandler.commandUsageMessage(this.commandSyntax(), commandExecutor);
 			return;
 		}
+		// Get and print seed
 		long seed = commandExecutor.worldObj.getWorldSeed();
 		String message = StatCollector.translateToLocal("command.seed.value")
 			.replace("%v", "" + seed);
@@ -25,7 +27,7 @@ public class CommandSeed extends Command {
 
 	@Override
 	public void printHelpInformation(EntityPlayerSP var1) {
-		
+		// Prints usage and help by default
 	}
 
 	@Override

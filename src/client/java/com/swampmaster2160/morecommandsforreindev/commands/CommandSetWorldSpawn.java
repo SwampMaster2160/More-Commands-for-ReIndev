@@ -1,5 +1,9 @@
 package com.swampmaster2160.morecommandsforreindev.commands;
 
+import org.jetbrains.annotations.Nullable;
+
+import com.swampmaster2160.morecommandsforreindev.MoreCommandsForReIndevClient;
+
 import net.minecraft.mitask.PlayerCommandHandler;
 import net.minecraft.mitask.command.Command;
 import net.minecraft.mitask.command.CommandErrorHandler;
@@ -15,61 +19,32 @@ public class CommandSetWorldSpawn extends Command {
 
 	@Override
 	public void onExecute(String[] args, EntityPlayerSP commandExecutor) {
-		if (args.length != 4 && args.length != 1  && args.length != 3) {
+		// Command should have 1 or 4 arguments including the command name
+		if (args.length != 1 && args.length != 4) {
 			CommandErrorHandler.commandUsageMessage(this.commandSyntax(), commandExecutor);
 			return;
 		}
+		// Get x, y and z arguments which deafult to "~" if the command format does not have the argument
 		String xArg = "~";
 		String yArg = "~";
 		String zArg = "~";
-		if (args.length == 3) {
-			xArg = args[1];
-			zArg = args[2];
-		}
 		if (args.length == 4) {
 			xArg = args[1];
 			yArg = args[2];
 			zArg = args[3];
 		}
-		if (xArg.isEmpty() || yArg.isEmpty() || zArg.isEmpty()) {
+		// Parse x, y and z arguments
+		@Nullable Integer x = MoreCommandsForReIndevClient.parseIntCoordinate(xArg, (int)Math.round(commandExecutor.posX));
+		@Nullable Integer y = MoreCommandsForReIndevClient.parseIntCoordinate(yArg, (int)Math.round(commandExecutor.posY));
+		@Nullable Integer z = MoreCommandsForReIndevClient.parseIntCoordinate(zArg, (int)Math.round(commandExecutor.posZ));
+		if (x == null || y == null || z == null) {
 			CommandErrorHandler.commandUsageMessage(this.commandSyntax(), commandExecutor);
 			return;
 		}
-		int x = 0;
-		int y = 0;
-		int z = 0;
-		if (xArg.startsWith("~")) {
-			xArg = xArg.substring(1);
-			if (xArg.isEmpty()) {
-				xArg = "0";
-			}
-			x += commandExecutor.posX;
-		}
-		if (yArg.startsWith("~")) {
-			yArg = yArg.substring(1);
-			if (yArg.isEmpty()) {
-				yArg = "0";
-			}
-			y += commandExecutor.posY;
-		}
-		if (zArg.startsWith("~")) {
-			zArg = zArg.substring(1);
-			if (zArg.isEmpty()) {
-				zArg = "0";
-			}
-			z += commandExecutor.posZ;
-		}
-		try {
-			x += Integer.parseInt(xArg);
-			y += Integer.parseInt(yArg);
-			z += Integer.parseInt(zArg);
-		}
-		catch (NumberFormatException e) {
-			CommandErrorHandler.commandUsageMessage(this.commandSyntax(), commandExecutor);
-			return;
-		}
+		// Set spawn point
 		World world = commandExecutor.worldObj;
 		world.setSpawnPoint(new ChunkCoordinates(x, y, z));
+		// Print success message
 		ChunkCoordinates spawnPoint = world.getSpawnPoint();
 		String message = StatCollector.translateToLocal("command.setworldspawn.set")
 			.replace("%x", "" + spawnPoint.x)
@@ -80,11 +55,11 @@ public class CommandSetWorldSpawn extends Command {
 
 	@Override
 	public void printHelpInformation(EntityPlayerSP var1) {
-		
+		// Prints usage and help by default
 	}
 
 	@Override
 	public String commandSyntax() {
-		return "\u00a7e/setworldspawn <x> <y> <z>";
+		return "\u00a7e/setworldspawn [x y z]";
 	}
 }

@@ -1,5 +1,7 @@
 package com.swampmaster2160.morecommandsforreindev;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.fox2code.foxloader.loader.ClientMod;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableCheats;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableDimension;
@@ -58,5 +60,21 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		WorldInfoVariable.registerVariable("lowestChunkNether", new WorldInfoVariableLowestChunkNether(), new String[] {"lcn"});
 		WorldInfoVariable.registerVariable("worldName", new WorldInfoVariableWorldName(), new String[] {"wn"});
 		WorldInfoVariable.registerVariable("spawnPos", new WorldInfoVariableSpawnPos(), new String[] {"sp"});
+	}
+
+	public static @Nullable Integer parseIntCoordinate(String argument, int commandExecutorCoordinate) {
+		if (argument.isEmpty()) return null;
+		int out = 0;
+		if (argument.startsWith("~")) {
+			argument = argument.substring(1);
+			if (argument.isEmpty()) return commandExecutorCoordinate;
+			out = commandExecutorCoordinate;
+		}
+		try {
+			return out + Integer.parseInt(argument);
+		}
+		catch (NumberFormatException e) {
+			return null;
+		}
 	}
 }
