@@ -9,3 +9,8 @@ command.seed.value: Seed: %v
 command.seed: §dGet the world seed.
 command.setworldspawn: §dSet the world spawn point.
 command.setworldspawn.set: Set the world spawn to (%x, %y, %z).
+command.toggledownfall: §dClears rain if raining or starts rain otherwise.
+command.toggledownfall.toggle: Toggled downfall.
+command.summon: Summon an enity.
+command.summon.summon: Summoned an entity with id %n/%i at (%x, %y, %z).
+command.summon.unable_to_summon: §cUnable to summon entity.

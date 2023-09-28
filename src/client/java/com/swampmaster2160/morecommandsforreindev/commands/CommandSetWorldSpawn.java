@@ -15,30 +15,48 @@ public class CommandSetWorldSpawn extends Command {
 
 	@Override
 	public void onExecute(String[] args, EntityPlayerSP commandExecutor) {
-		if (args.length != 4) {
+		if (args.length != 4 && args.length != 1  && args.length != 3) {
 			CommandErrorHandler.commandUsageMessage(this.commandSyntax(), commandExecutor);
 			return;
 		}
-		if (args[1].isEmpty() || args[2].isEmpty() || args[3].isEmpty()) {
+		String xArg = "~";
+		String yArg = "~";
+		String zArg = "~";
+		if (args.length == 3) {
+			xArg = args[1];
+			zArg = args[2];
+		}
+		if (args.length == 4) {
+			xArg = args[1];
+			yArg = args[2];
+			zArg = args[3];
+		}
+		if (xArg.isEmpty() || yArg.isEmpty() || zArg.isEmpty()) {
 			CommandErrorHandler.commandUsageMessage(this.commandSyntax(), commandExecutor);
 			return;
 		}
 		int x = 0;
 		int y = 0;
 		int z = 0;
-		String xArg = args[1];
-		String yArg = args[2];
-		String zArg = args[3];
 		if (xArg.startsWith("~")) {
-			xArg = "0" + xArg.substring(1);
+			xArg = xArg.substring(1);
+			if (xArg.isEmpty()) {
+				xArg = "0";
+			}
 			x += commandExecutor.posX;
 		}
 		if (yArg.startsWith("~")) {
-			yArg = "0" + yArg.substring(1);
+			yArg = yArg.substring(1);
+			if (yArg.isEmpty()) {
+				yArg = "0";
+			}
 			y += commandExecutor.posY;
 		}
 		if (zArg.startsWith("~")) {
-			zArg = "0" + zArg.substring(1);
+			zArg = zArg.substring(1);
+			if (zArg.isEmpty()) {
+				zArg = "0";
+			}
 			z += commandExecutor.posZ;
 		}
 		try {
