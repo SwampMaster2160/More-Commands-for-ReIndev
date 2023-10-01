@@ -2,7 +2,7 @@ package com.swampmaster2160.morecommandsforreindev.commands;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.swampmaster2160.morecommandsforreindev.MoreCommandsForReIndevClient;
+import com.swampmaster2160.morecommandsforreindev.MoreCommandsForReIndev;
 
 import net.minecraft.mitask.PlayerCommandHandler;
 import net.minecraft.mitask.command.Command;
@@ -34,9 +34,9 @@ public class CommandSetWorldSpawn extends Command {
 			zArg = args[3];
 		}
 		// Parse x, y and z arguments
-		@Nullable Integer x = MoreCommandsForReIndevClient.parseIntCoordinate(xArg, (int)Math.round(commandExecutor.posX));
-		@Nullable Integer y = MoreCommandsForReIndevClient.parseIntCoordinate(yArg, (int)Math.round(commandExecutor.posY));
-		@Nullable Integer z = MoreCommandsForReIndevClient.parseIntCoordinate(zArg, (int)Math.round(commandExecutor.posZ));
+		@Nullable Integer x = MoreCommandsForReIndev.parseIntCoordinate(xArg, (int)Math.round(commandExecutor.posX));
+		@Nullable Integer y = MoreCommandsForReIndev.parseIntCoordinate(yArg, (int)Math.round(commandExecutor.posY));
+		@Nullable Integer z = MoreCommandsForReIndev.parseIntCoordinate(zArg, (int)Math.round(commandExecutor.posZ));
 		if (x == null || y == null || z == null) {
 			CommandErrorHandler.commandUsageMessage(this.commandSyntax(), commandExecutor);
 			return;

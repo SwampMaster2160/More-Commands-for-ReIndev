@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.swampmaster2160.morecommandsforreindev.commands.CommandKill;
 import com.swampmaster2160.morecommandsforreindev.commands.CommandSeed;
 import com.swampmaster2160.morecommandsforreindev.commands.CommandSetWorldSpawn;
 import com.swampmaster2160.morecommandsforreindev.commands.CommandSummon;
@@ -24,5 +25,6 @@ public abstract class MixinPlayerCommandHandler {
 		((PlayerCommandHandler)(Object)this).addCommand(new CommandSetWorldSpawn(((PlayerCommandHandler)(Object)this)));
 		((PlayerCommandHandler)(Object)this).addCommand(new CommandToggleDownFall(((PlayerCommandHandler)(Object)this)));
 		((PlayerCommandHandler)(Object)this).addCommand(new CommandSummon(((PlayerCommandHandler)(Object)this)));
+		((PlayerCommandHandler)(Object)this).addCommand(new CommandKill(((PlayerCommandHandler)(Object)this)));
 	}
 }

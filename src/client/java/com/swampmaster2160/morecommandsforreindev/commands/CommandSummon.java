@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.swampmaster2160.morecommandsforreindev.MoreCommandsForReIndevClient;
+import com.swampmaster2160.morecommandsforreindev.MoreCommandsForReIndev;
 
 import net.minecraft.mitask.PlayerCommandHandler;
 import net.minecraft.mitask.command.Command;
@@ -51,9 +51,9 @@ public class CommandSummon extends Command {
 			zArg = args[4];
 		}
 		// Parse x, y and z arguments
-		@Nullable Double x = MoreCommandsForReIndevClient.parseDoubleCoordinate(xArg, commandExecutor.posX);
-		@Nullable Double y = MoreCommandsForReIndevClient.parseDoubleCoordinate(yArg, commandExecutor.posY);
-		@Nullable Double z = MoreCommandsForReIndevClient.parseDoubleCoordinate(zArg, commandExecutor.posZ);
+		@Nullable Double x = MoreCommandsForReIndev.parseDoubleCoordinate(xArg, commandExecutor.posX);
+		@Nullable Double y = MoreCommandsForReIndev.parseDoubleCoordinate(yArg, commandExecutor.posY);
+		@Nullable Double z = MoreCommandsForReIndev.parseDoubleCoordinate(zArg, commandExecutor.posZ);
 		if (x == null || y == null || z == null) {
 			CommandErrorHandler.commandUsageMessage(this.commandSyntax(), commandExecutor);
 			return;
@@ -85,7 +85,7 @@ public class CommandSummon extends Command {
 		world.entityJoinedWorld(entity);
 		// Print success message
 		String message = StatCollector.translateToLocal("command.summon.summon")
-			.replace("%n", "" + EntityList.getEntityString(entity))
+			.replace("%n", EntityList.getEntityString(entity))
 			.replace("%i", "" + EntityList.getEntityID(entity))
 			.replace("%x", "" + entity.posX)
 			.replace("%y", "" + entity.posY)

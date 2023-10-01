@@ -1,7 +1,5 @@
 package com.swampmaster2160.morecommandsforreindev;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.fox2code.foxloader.loader.ClientMod;
 import com.swampmaster2160.morecommandsforreindev.commands.CommandSummon;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableCheats;
@@ -66,37 +64,5 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		CommandSummon.addBadEnitity(3, "FireResistantItem");
 		CommandSummon.addBadEnitity(9, "Painting");
 		CommandSummon.addBadEnitity(13, "SplashPotion");
-	}
-
-	public static @Nullable Integer parseIntCoordinate(String argument, int commandExecutorCoordinate) {
-		if (argument.isEmpty()) return null;
-		int out = 0;
-		if (argument.startsWith("~")) {
-			argument = argument.substring(1);
-			if (argument.isEmpty()) return commandExecutorCoordinate;
-			out = commandExecutorCoordinate;
-		}
-		try {
-			return out + Integer.parseInt(argument);
-		}
-		catch (NumberFormatException e) {
-			return null;
-		}
-	}
-
-	public static @Nullable Double parseDoubleCoordinate(String argument, double commandExecutorCoordinate) {
-		if (argument.isEmpty()) return null;
-		double out = 0;
-		if (argument.startsWith("~")) {
-			argument = argument.substring(1);
-			if (argument.isEmpty()) return commandExecutorCoordinate;
-			out = commandExecutorCoordinate;
-		}
-		try {
-			return out + Double.parseDouble(argument);
-		}
-		catch (NumberFormatException e) {
-			return null;
-		}
 	}
 }
