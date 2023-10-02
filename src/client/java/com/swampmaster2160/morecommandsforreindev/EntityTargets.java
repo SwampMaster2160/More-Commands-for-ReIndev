@@ -31,6 +31,9 @@ public abstract class EntityTargets {
 				currentToken = null;
 			}
 		}
+		/*for (Object token: tokensAndParsedObjects) {
+			System.out.println(token);
+		}*/
 		boolean hasError = evaluateTokens(world, tokensAndParsedObjects, 0, true);
 		if (hasError) return null;
 		return (Entity[])(tokensAndParsedObjects.get(0));
@@ -51,7 +54,7 @@ public abstract class EntityTargets {
 	public static boolean evaluateTokens(World world, ArrayList<Object> tokens, int startIndex, boolean isRoot) {
 		// Parse ()
 		int parseEnd = 0;
-		for (int index = startIndex; startIndex < tokens.size(); index++) {
+		for (int index = startIndex; index < tokens.size(); index++) {
 			Object token = tokens.get(index);
 			if (token instanceof String) {
 				String tokenString = (String)token;
@@ -114,7 +117,152 @@ public abstract class EntityTargets {
 				}
 			}
 		}
-		//
+		// Parse &
+		for (int index = startIndex; index < tokens.size(); index++) {
+			Object token = tokens.get(index);
+			if (token instanceof String) {
+				String tokenString = (String)token;
+				if (tokenString.equals("&")) {
+					//System.out.println("A");
+					if (index == startIndex) return true;
+					Object nextToken = null;
+					try {
+						nextToken = tokens.get(index + 1);
+					}
+					catch (IndexOutOfBoundsException e) {
+						return true;
+					}
+					Object lastToken = null;
+					try {
+						lastToken = tokens.get(index - 1);
+					}
+					catch (IndexOutOfBoundsException e) {
+						return true;
+					}
+					index--;
+					tokens.remove(index);
+					tokens.remove(index);
+					tokens.remove(index);
+					if (!(nextToken instanceof Entity[])) return true;
+					if (!(lastToken instanceof Entity[])) return true;
+					Entity[] nextTokenEntities = (Entity[])nextToken;
+					Entity[] lastTokenEntities = (Entity[])lastToken;
+					ArrayList<Entity> andResult = new ArrayList<Entity>();
+					for (Entity entityA: lastTokenEntities) {
+						boolean hasEntity = false;
+						for (Entity entityB: nextTokenEntities) {
+							if (entityB == entityA) {
+								hasEntity = true;
+								break;
+							}
+						}
+						if (hasEntity) andResult.add(entityA);
+					}
+					tokens.add(index, andResult.toArray(new Entity[] {}));
+				}
+			}
+		}
+		// Parse ^
+		for (int index = startIndex; index < tokens.size(); index++) {
+			Object token = tokens.get(index);
+			if (token instanceof String) {
+				String tokenString = (String)token;
+				if (tokenString.equals("^")) {
+					if (index == startIndex) return true;
+					Object nextToken = null;
+					try {
+						nextToken = tokens.get(index + 1);
+					}
+					catch (IndexOutOfBoundsException e) {
+						return true;
+					}
+					Object lastToken = null;
+					try {
+						lastToken = tokens.get(index - 1);
+					}
+					catch (IndexOutOfBoundsException e) {
+						return true;
+					}
+					index--;
+					tokens.remove(index);
+					tokens.remove(index);
+					tokens.remove(index);
+					if (!(nextToken instanceof Entity[])) return true;
+					if (!(lastToken instanceof Entity[])) return true;
+					Entity[] nextTokenEntities = (Entity[])nextToken;
+					Entity[] lastTokenEntities = (Entity[])lastToken;
+					ArrayList<Entity> xorResult = new ArrayList<Entity>();
+					for (Entity entityA: lastTokenEntities) {
+						boolean hasEntity = false;
+						for (Entity entityB: nextTokenEntities) {
+							if (entityB == entityA) {
+								hasEntity = true;
+								break;
+							}
+						}
+						if (!hasEntity) xorResult.add(entityA);
+					}
+					for (Entity entityA: nextTokenEntities) {
+						boolean hasEntity = false;
+						for (Entity entityB: lastTokenEntities) {
+							if (entityB == entityA) {
+								hasEntity = true;
+								break;
+							}
+						}
+						if (!hasEntity) xorResult.add(entityA);
+					}
+					tokens.add(index, xorResult.toArray(new Entity[] {}));
+				}
+			}
+		}
+		// Parse |
+		for (int index = startIndex; index < tokens.size(); index++) {
+			Object token = tokens.get(index);
+			if (token instanceof String) {
+				String tokenString = (String)token;
+				if (tokenString.equals("|")) {
+					if (index == startIndex) return true;
+					Object nextToken = null;
+					try {
+						nextToken = tokens.get(index + 1);
+					}
+					catch (IndexOutOfBoundsException e) {
+						return true;
+					}
+					Object lastToken = null;
+					try {
+						lastToken = tokens.get(index - 1);
+					}
+					catch (IndexOutOfBoundsException e) {
+						return true;
+					}
+					index--;
+					tokens.remove(index);
+					tokens.remove(index);
+					tokens.remove(index);
+					if (!(nextToken instanceof Entity[])) return true;
+					if (!(lastToken instanceof Entity[])) return true;
+					Entity[] nextTokenEntities = (Entity[])nextToken;
+					Entity[] lastTokenEntities = (Entity[])lastToken;
+					ArrayList<Entity> orResult = new ArrayList<Entity>();
+					for (Entity entity: nextTokenEntities) {
+						orResult.add(entity);
+					}
+					for (Entity entityA: lastTokenEntities) {
+						boolean hasEntity = false;
+						for (Entity entityB: nextTokenEntities) {
+							if (entityB == entityA) {
+								hasEntity = true;
+								break;
+							}
+						}
+						if (!hasEntity) orResult.add(entityA);
+					}
+					tokens.add(index, orResult.toArray(new Entity[] {}));
+				}
+			}
+		}
 		return false;
 	}
 
