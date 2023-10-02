@@ -34,7 +34,7 @@ public class CommandKill extends Command {
 			return;
 		}
 		// Get targets
-		@Nullable Entity[] targets = EntityTargets.getTargetsFromString(world, args[1], commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ);
+		@Nullable Entity[] targets = EntityTargets.getTargetsFromString(world, args[1], commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor);
 		// Print a syntax error if there was a syntax error parsing the targets
 		if (targets == null) {
 			String message = StatCollector.translateToLocal("command.kill.target_syntax_error");
@@ -56,9 +56,10 @@ public class CommandKill extends Command {
 				if (entity instanceof EntityLiving) {
 					((EntityLiving)entity).heal(Integer.MIN_VALUE);
 				}
+				else {
+					world.getLoadedEntityList().remove(entity);
+				}
 			}
-			// If it is not killed in the end
-			world.getLoadedEntityList().remove(entity);
 		}
 		// Print kill message
 		if (entities.length == 0) {
