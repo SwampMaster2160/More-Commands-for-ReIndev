@@ -17,5 +17,5 @@ command.summon.unable_to_summon: §cUnable to summon entity.
 command.kill: Kill entities.
 command.kill.kill_multi: Killed %c entities.
 command.kill.kill_none: No entities where targeted.
-command.kill.kill_one: Killed %n.
-command.kill.target_syntax_error: §cSyntax error.
+command.kill.kill_one: Killed 1 entity.
+command.kill.target_syntax_error: §cSyntax error while parsing targets.

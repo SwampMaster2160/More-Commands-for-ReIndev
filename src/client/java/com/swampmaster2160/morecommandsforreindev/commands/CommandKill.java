@@ -9,9 +9,7 @@ import net.minecraft.mitask.command.Command;
 import net.minecraft.mitask.command.CommandErrorHandler;
 import net.minecraft.src.client.player.EntityPlayerSP;
 import net.minecraft.src.game.entity.Entity;
-import net.minecraft.src.game.entity.EntityList;
 import net.minecraft.src.game.entity.EntityLiving;
-import net.minecraft.src.game.entity.player.EntityPlayer;
 import net.minecraft.src.game.level.World;
 import net.minecraft.src.game.stats.StatCollector;
 
@@ -36,7 +34,7 @@ public class CommandKill extends Command {
 			return;
 		}
 		// Get targets
-		@Nullable Entity[] targets = EntityTargets.getTargetsFromString(world, args[1]);
+		@Nullable Entity[] targets = EntityTargets.getTargetsFromString(world, args[1], commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ);
 		// Print a syntax error if there was a syntax error parsing the targets
 		if (targets == null) {
 			String message = StatCollector.translateToLocal("command.kill.target_syntax_error");
@@ -69,13 +67,13 @@ public class CommandKill extends Command {
 			return;
 		}
 		if (entities.length == 1) {
-			Entity entity = entities[0];
+			/*Entity entity = entities[0];
 			String name = EntityList.getEntityString(entity);
 			if (entity instanceof EntityPlayerSP) {
 				name = ((EntityPlayerSP)entity).username;
-			}
-			String message = StatCollector.translateToLocal("command.kill.kill_one")
-				.replace("%n", "" + EntityList.getEntityString(entities[0]));
+			}*/
+			String message = StatCollector.translateToLocal("command.kill.kill_one");
+				//.replace("%n", "" + EntityList.getEntityString(entities[0]));
 			commandExecutor.addChatMessage(message);
 			return;
 		}
