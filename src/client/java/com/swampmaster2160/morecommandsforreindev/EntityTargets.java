@@ -31,10 +31,13 @@ public abstract class EntityTargets {
 				currentToken = null;
 			}
 		}
-		
-		for (Object token: tokensAndParsedObjects) {
+		boolean hasError = evaluateTokens(world, tokensAndParsedObjects, 0, true);
+		if (hasError) return null;
+		return (Entity[])(tokensAndParsedObjects.get(0));
+
+		/*for (Object token: tokensAndParsedObjects) {
 			System.out.println(token);
-		}
+		}*/
 
 		//Entity[] out = new Entity[0];
 		//return out;
@@ -42,7 +45,39 @@ public abstract class EntityTargets {
 		if (out == null) return null;
 		if (!(out instanceof Entity[])) return null;
 		return (Entity[])out;*/
-		return null;
+		//return null;
+	}
+
+	public static boolean evaluateTokens(World world, ArrayList<Object> tokens, int startIndex, boolean isRoot) {
+		// Parse ()
+		for (int index = startIndex; startIndex < tokens.size(); index++) {
+			Object token = tokens.get(index);
+			if (token instanceof String) {
+				String tokenString = (String)token;
+				if (tokenString.equals("(")) {
+					tokens.remove(index);
+					if (index == tokens.size()) return true;
+					boolean hasError = evaluateTokens(world, tokens, index, false);
+					if (hasError) return true;
+					try {
+						tokens.remove(index + 1);
+					}
+					catch (IndexOutOfBoundsException e) {
+						return true;
+					}
+				}
+				if (tokenString.equals(")")) {
+					if (isRoot) return true;
+					break;
+				}
+			}
+			if (index == tokens.size() - 1) {
+				if (!isRoot) return true;
+				break;
+			}
+		}
+		//
+		return false;
 	}
 
 	public static @Nullable Object evaluateTokenFirstRound(World world, String token, double x, double y, double z, @Nullable Entity executerEntity) {
