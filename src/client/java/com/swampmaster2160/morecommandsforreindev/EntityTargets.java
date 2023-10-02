@@ -11,15 +11,42 @@ import net.minecraft.src.game.level.World;
 
 public abstract class EntityTargets {
 	public static @Nullable Entity[] getTargetsFromString(World world, String string, double x, double y, double z, Entity executerEntity) {
+		ArrayList<Object> tokensAndParsedObjects = new ArrayList<Object>();
+		// Tokenise and first evaluation round
+		@Nullable String currentToken = null;
+		for (int index = 0; index < string.length(); index++) {
+			char chr = string.charAt(index);
+			if (chr == '(' || chr == ')' || chr == '!' || chr == '|' || chr == '&' || chr == '^') {
+				tokensAndParsedObjects.add("" + chr);
+				continue;
+			}
+			if (currentToken == null) currentToken = "";
+			currentToken = currentToken + chr;
+			@Nullable Character nextChar = null;
+			if (index < string.length() - 1) nextChar = string.charAt(index + 1);
+			if (nextChar == null || nextChar == '(' || nextChar == ')' || nextChar == '!' || nextChar == '|' || nextChar == '&' || nextChar == '^' || nextChar == '@' || nextChar == '#') {
+				@Nullable Object tokenFirstRoundEvaluation = evaluateTokenFirstRound(world, currentToken, x, y, z, executerEntity);
+				if (tokenFirstRoundEvaluation == null) return null;
+				tokensAndParsedObjects.add(tokenFirstRoundEvaluation);
+				currentToken = null;
+			}
+		}
+		
+		for (Object token: tokensAndParsedObjects) {
+			System.out.println(token);
+		}
+
 		//Entity[] out = new Entity[0];
 		//return out;
-		Object out = evaluateTokenFirstRound(world, string, x, y, z, executerEntity);
+		/*Object out = evaluateTokenFirstRound(world, string, x, y, z, executerEntity);
 		if (out == null) return null;
 		if (!(out instanceof Entity[])) return null;
-		return (Entity[])out;
+		return (Entity[])out;*/
+		return null;
 	}
 
 	public static @Nullable Object evaluateTokenFirstRound(World world, String token, double x, double y, double z, @Nullable Entity executerEntity) {
+		if (token == "(" || token == ")" || token == "!" || token == "|" || token == "&" || token == "^") return token;
 		if (token.startsWith("@")) {
 			String tokenWithoutPrefix = token.substring(1);
 			switch (tokenWithoutPrefix) {
