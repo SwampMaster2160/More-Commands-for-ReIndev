@@ -50,6 +50,7 @@ public abstract class EntityTargets {
 
 	public static boolean evaluateTokens(World world, ArrayList<Object> tokens, int startIndex, boolean isRoot) {
 		// Parse ()
+		int parseEnd = 0;
 		for (int index = startIndex; startIndex < tokens.size(); index++) {
 			Object token = tokens.get(index);
 			if (token instanceof String) {
@@ -70,12 +71,47 @@ public abstract class EntityTargets {
 				}
 				if (tokenString.equals(")")) {
 					if (isRoot) return true;
+					parseEnd = index;
 					break;
 				}
 			}
 			if (index == tokens.size() - 1) {
 				if (!isRoot) return true;
+				parseEnd = index;
 				break;
+			}
+		}
+		// Parse !
+		for (int index = parseEnd; index >= startIndex; index--) {
+			Object token = tokens.get(index);
+			if (token instanceof String) {
+				String tokenString = (String)token;
+				if (tokenString.equals("!")) {
+					tokens.remove(index);
+					Object nextToken = null;
+					try {
+						nextToken = tokens.get(index);
+					}
+					catch (IndexOutOfBoundsException e) {
+						return true;
+					}
+					tokens.remove(index);
+					if (!(nextToken instanceof Entity[])) return true;
+					Entity[] nextTokenEntities = (Entity[])nextToken;
+					List<Entity> allEntities = world.getLoadedEntityList();
+					ArrayList<Entity> notResult = new ArrayList<Entity>();
+					for (Entity entity: allEntities) {
+						boolean hasEntity = true;
+						for (Entity nextEntity: nextTokenEntities) {
+							if (nextEntity == entity) {
+								hasEntity = false;
+								break;
+							}
+						}
+						if (hasEntity) notResult.add(entity);
+					}
+					tokens.add(index, notResult.toArray(new Entity[] {}));
+				}
 			}
 		}
 		//
