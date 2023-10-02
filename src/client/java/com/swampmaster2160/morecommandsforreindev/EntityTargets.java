@@ -60,7 +60,9 @@ public abstract class EntityTargets {
 					boolean hasError = evaluateTokens(world, tokens, index, false);
 					if (hasError) return true;
 					try {
-						tokens.remove(index + 1);
+						Object removed = tokens.remove(index + 1);
+						if (!(removed instanceof String)) return true;
+						if (!(((String)removed).equals(")"))) return true;
 					}
 					catch (IndexOutOfBoundsException e) {
 						return true;
