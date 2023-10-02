@@ -98,6 +98,15 @@ public abstract class EntityTargets {
 			}
 			return null;
 		}
+		List<Entity> entities = world.getLoadedEntityList();
+		for (Entity entity: entities) {
+			if (!(entity instanceof EntityPlayer)) continue;
+			EntityPlayer player = (EntityPlayer)entity;
+			if (!player.username.equals(token)) continue;
+			Entity[] out = new Entity[1];
+			out[0] = entity;
+			return out;
+		}
 		return null;
 	}
 }
