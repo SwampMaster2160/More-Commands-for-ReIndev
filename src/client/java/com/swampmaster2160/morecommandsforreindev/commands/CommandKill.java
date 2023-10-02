@@ -23,8 +23,7 @@ public class CommandKill extends Command {
 		World world = commandExecutor.worldObj;
 		// Kill executer if /kill does not have any extra arguments
 		if (args.length == 1) {
-			Entity[] entities = new Entity[1];
-			entities[0] = commandExecutor;
+			Entity[] entities = { commandExecutor };
 			killEntities(commandExecutor, entities);
 			return;
 		}
@@ -34,7 +33,7 @@ public class CommandKill extends Command {
 			return;
 		}
 		// Get targets
-		@Nullable Entity[] targets = EntityTargets.getTargetsFromString(world, args[1], commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor);
+		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, args[1], commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor);
 		// Print a syntax error if there was a syntax error parsing the targets
 		if (targets == null) {
 			String message = StatCollector.translateToLocal("command.kill.target_syntax_error");
@@ -45,10 +44,15 @@ public class CommandKill extends Command {
 		killEntities(commandExecutor, targets);
 	}
 
-	void killEntities(EntityPlayerSP commandExecutor, Entity[] entities) {
+	/**
+	 * Kills all specified entities
+	 * @param commandExecutor Info about the executer
+	 * @param entitiesToKill An array of all entities that should be killed
+	 */
+	void killEntities(EntityPlayerSP commandExecutor, Entity[] entitiesToKill) {
 		World world = commandExecutor.worldObj;
 		// Kill all entities
-		for (Entity entity: entities) {
+		for (Entity entity: entitiesToKill) {
 			// Kill the entity properly if we can
 			boolean wasEntityKilled = entity.attackEntityFrom(null, Integer.MAX_VALUE);
 			// A work arround for other entities such as a creative mode player
@@ -62,24 +66,18 @@ public class CommandKill extends Command {
 			}
 		}
 		// Print kill message
-		if (entities.length == 0) {
+		if (entitiesToKill.length == 0) {
 			String message = StatCollector.translateToLocal("command.kill.kill_none");
 			commandExecutor.addChatMessage(message);
 			return;
 		}
-		if (entities.length == 1) {
-			/*Entity entity = entities[0];
-			String name = EntityList.getEntityString(entity);
-			if (entity instanceof EntityPlayerSP) {
-				name = ((EntityPlayerSP)entity).username;
-			}*/
+		if (entitiesToKill.length == 1) {
 			String message = StatCollector.translateToLocal("command.kill.kill_one");
-				//.replace("%n", "" + EntityList.getEntityString(entities[0]));
 			commandExecutor.addChatMessage(message);
 			return;
 		}
 		String message = StatCollector.translateToLocal("command.kill.kill_multi")
-			.replace("%c", "" + entities.length);
+			.replace("%c", "" + entitiesToKill.length);
 		commandExecutor.addChatMessage(message);
 	}
 

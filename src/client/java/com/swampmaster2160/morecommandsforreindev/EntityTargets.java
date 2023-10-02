@@ -10,80 +10,84 @@ import net.minecraft.src.game.entity.player.EntityPlayer;
 import net.minecraft.src.game.level.World;
 
 public abstract class EntityTargets {
-	public static @Nullable Entity[] getTargetsFromString(World world, String string, double x, double y, double z, Entity executerEntity) {
+	public static @Nullable Entity[] getTargetsFromSelectorString(World world, String string, double x, double y, double z, Entity executerEntity) {
 		ArrayList<Object> tokensAndParsedObjects = new ArrayList<Object>();
-		// Tokenise and first evaluation round
-		@Nullable String currentToken = null;
+		// Loop over each char in the string to convert the string to tokens
+		@Nullable String currentToken = "";
 		for (int index = 0; index < string.length(); index++) {
+			// Get the char
 			char chr = string.charAt(index);
+			// Add the char as a token if it is a single char token
 			if (chr == '(' || chr == ')' || chr == '!' || chr == '|' || chr == '&' || chr == '^') {
 				tokensAndParsedObjects.add("" + chr);
 				continue;
 			}
-			if (currentToken == null) currentToken = "";
+			// Else add the char to the token we are currently extracting
 			currentToken = currentToken + chr;
+			// Get the next char
 			@Nullable Character nextChar = null;
 			if (index < string.length() - 1) nextChar = string.charAt(index + 1);
+			// If the next char should start a new token or we are at the end of the string then end the token
 			if (nextChar == null || nextChar == '(' || nextChar == ')' || nextChar == '!' || nextChar == '|' || nextChar == '&' || nextChar == '^' || nextChar == '@' || nextChar == '#') {
+				// If the token on its own can be converted to a list of entities then do so
 				@Nullable Object tokenFirstRoundEvaluation = evaluateTokenFirstRound(world, currentToken, x, y, z, executerEntity);
+				// If there is an error then return
 				if (tokenFirstRoundEvaluation == null) return null;
+				// Add the tokens to the token list and create a new token
 				tokensAndParsedObjects.add(tokenFirstRoundEvaluation);
-				currentToken = null;
+				currentToken = "";
 			}
 		}
-		/*for (Object token: tokensAndParsedObjects) {
-			System.out.println(token);
-		}*/
+		// Parse all other unparsed tokens, if there is an error then return null
 		boolean hasError = evaluateTokens(world, tokensAndParsedObjects, 0, true);
 		if (hasError) return null;
+		// Return the first token and should be only token
+		if (tokensAndParsedObjects.size() != 1) return null;
 		return (Entity[])(tokensAndParsedObjects.get(0));
-
-		/*for (Object token: tokensAndParsedObjects) {
-			System.out.println(token);
-		}*/
-
-		//Entity[] out = new Entity[0];
-		//return out;
-		/*Object out = evaluateTokenFirstRound(world, string, x, y, z, executerEntity);
-		if (out == null) return null;
-		if (!(out instanceof Entity[])) return null;
-		return (Entity[])out;*/
-		//return null;
 	}
 
 	public static boolean evaluateTokens(World world, ArrayList<Object> tokens, int startIndex, boolean isRoot) {
-		// Parse ()
-		int parseEnd = 0;
+		// Find brackets and recursively parse the content of the brackets
+		@Nullable Integer parseEnd = null;
 		for (int index = startIndex; index < tokens.size(); index++) {
+			// Get token
 			Object token = tokens.get(index);
-			if (token instanceof String) {
-				String tokenString = (String)token;
-				if (tokenString.equals("(")) {
-					tokens.remove(index);
-					if (index == tokens.size()) return true;
-					boolean hasError = evaluateTokens(world, tokens, index, false);
-					if (hasError) return true;
-					try {
-						Object removed = tokens.remove(index + 1);
-						if (!(removed instanceof String)) return true;
-						if (!(((String)removed).equals(")"))) return true;
-					}
-					catch (IndexOutOfBoundsException e) {
-						return true;
-					}
+			// Only the root evaluation should end without a closing bracket
+			if (index == tokens.size() - 1 && !isRoot) {
+				if (!(token instanceof String)) return true;
+				if (!((String)token).equals(")")) return true;
+			}
+			// Skip tokens that have already been parsed
+			if (!(token instanceof String)) continue;
+			String tokenString = (String)token;
+			// Opening brackets should call this function on the content
+			if (tokenString.equals("(")) {
+				// Remove opening bracket
+				tokens.remove(index);
+				if (index == tokens.size()) return true;
+				// Evaluate bracketed area
+				boolean hasError = evaluateTokens(world, tokens, index, false);
+				if (hasError) return true;
+				// Remove end bracket
+				try {
+					// Remove bracket token
+					Object removed = tokens.remove(index + 1);
+					// It is an error if the removed token is not a bracket
+					if (!(removed instanceof String)) return true;
+					if (!(((String)removed).equals(")"))) return true;
 				}
-				if (tokenString.equals(")")) {
-					if (isRoot) return true;
-					parseEnd = index;
-					break;
+				catch (IndexOutOfBoundsException e) {
+					return true;
 				}
 			}
-			if (index == tokens.size() - 1) {
-				if (!isRoot) return true;
+			// Closing brackets should end the bracket content or be an error in the root evaluation
+			if (tokenString.equals(")")) {
+				if (isRoot) return true;
 				parseEnd = index;
 				break;
 			}
 		}
+		if (parseEnd == null) parseEnd = tokens.size() - 1;
 		// Parse !
 		for (int index = parseEnd; index >= startIndex; index--) {
 			Object token = tokens.get(index);
@@ -123,7 +127,6 @@ public abstract class EntityTargets {
 			if (token instanceof String) {
 				String tokenString = (String)token;
 				if (tokenString.equals("&")) {
-					//System.out.println("A");
 					if (index == startIndex) return true;
 					Object nextToken = null;
 					try {
