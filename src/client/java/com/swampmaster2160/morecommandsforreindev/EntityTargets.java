@@ -6,7 +6,6 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.src.game.entity.Entity;
-import net.minecraft.src.game.entity.player.EntityPlayer;
 import net.minecraft.src.game.level.World;
 
 public abstract class EntityTargets {
@@ -30,7 +29,7 @@ public abstract class EntityTargets {
 			// If the next char should start a new token or we are at the end of the string then end the token
 			if (nextChar == null || nextChar == '(' || nextChar == ')' || nextChar == '!' || nextChar == '|' || nextChar == '&' || nextChar == '^' || nextChar == '@' || nextChar == '#') {
 				// If the token on its own can be converted to a list of entities then do so
-				@Nullable Object tokenFirstRoundEvaluation = evaluateTokenFirstRound(world, currentToken, x, y, z, executerEntity);
+				@Nullable Object tokenFirstRoundEvaluation = evaluateSingleToken(world, currentToken, x, y, z, executerEntity);
 				// If there is an error then return
 				if (tokenFirstRoundEvaluation == null) return null;
 				// Add the tokens to the token list and create a new token
@@ -269,68 +268,33 @@ public abstract class EntityTargets {
 		return false;
 	}
 
-	public static @Nullable Object evaluateTokenFirstRound(World world, String token, double x, double y, double z, @Nullable Entity executerEntity) {
+	/**
+	 * Converts a token that does not depend on surrounding tokens to an entity list
+	 * @param world The main world object
+	 * @param token The token string to try to convert
+	 * @param x The x pos of the executer
+	 * @param y The y pos of the executer
+	 * @param z The z pos of the executer
+	 * @param executerEntity The entity that is executing the command
+	 * @return An entity list if the token alone can be converted to one.
+	 * null if there is an error converting the token.
+	 * The input string if the input string cannot be converted.
+	 */
+	public static @Nullable Object evaluateSingleToken(World world, String token, double x, double y, double z, @Nullable Entity executerEntity) {
+		// Return tokens that cannot be converted
 		if (token == "(" || token == ")" || token == "!" || token == "|" || token == "&" || token == "^") return token;
+		// Tokens starting with @ are target selectors
 		if (token.startsWith("@")) {
 			String tokenWithoutPrefix = token.substring(1);
-			switch (tokenWithoutPrefix) {
-				case "e":
-					return world.getLoadedEntityList().toArray(new Entity[] {});
-				case "p":
-					{
-						List<Entity> entities = world.getLoadedEntityList();
-						ArrayList<Entity> players = new ArrayList<Entity>();
-						for (Entity entity: entities) {
-							if (entity instanceof EntityPlayer) players.add(entity);
-						}
-						if (players.isEmpty()) return new Entity[0];
-						Entity nearestPlayer = null;
-						double nearestDistance = Double.POSITIVE_INFINITY;
-						for (Entity player: players) {
-							double distance = player.getDistance(x, y, z);
-							if (distance <= nearestDistance) {
-								nearestPlayer = player;
-								nearestDistance = distance;
-							}
-						}
-						Entity[] out = new Entity[1];
-						out[0] = nearestPlayer;
-						return out;
-					}
-				case "r":
-					{
-						List<Entity> entities = world.getLoadedEntityList();
-						ArrayList<Entity> players = new ArrayList<Entity>();
-						for (Entity entity: entities) {
-							if (entity instanceof EntityPlayer) players.add(entity);
-						}
-						if (players.isEmpty()) return new Entity[0];
-						int index = world.rand.nextInt(players.size());
-						Entity[] out = new Entity[1];
-						out[0] = players.get(index);
-						return out;
-					}
-				case "a":
-					{
-						List<Entity> entities = world.getLoadedEntityList();
-						ArrayList<Entity> players = new ArrayList<Entity>();
-						for (Entity entity: entities) {
-							if (entity instanceof EntityPlayer) players.add(entity);
-						}
-						return players.toArray(new Entity[] {});
-					}
-				case "s":
-					{
-						if (executerEntity == null) return new Entity[0];
-						Entity[] out = new Entity[1];
-						out[0] = executerEntity;
-						return out;
-					}
-				default:
-					return null;
-			}
+			// Get the selector
+			EntityTargetSelector targetSelector = EntityTargetSelector.getRegisteredTargetSelector(tokenWithoutPrefix);
+			if (targetSelector == null) return null;
+			// Get entities that it selects
+			return targetSelector.getSelectedEntities(world, x, y, z, executerEntity);
 		}
+		// Tokens starting with # select an entity by its instance id
 		if (token.startsWith("#")) {
+			// Parse the number
 			String tokenWithoutPrefix = token.substring(1);
 			int entityInstanceId;
 			try {
@@ -339,25 +303,15 @@ public abstract class EntityTargets {
 			catch (NumberFormatException e) {
 				return null;
 			}
-			List<Entity> entityList = world.getLoadedEntityList();
-			for (Entity entity: entityList) {
-				if (entity.entityId == entityInstanceId) {
-					Entity[] out = new Entity[1];
-					out[0] = entity;
-					return out;
-				}
+			// Get the entity with the id
+			for (Entity entity: world.getLoadedEntityList()) {
+				if (entity.entityId == entityInstanceId) return new Entity[] { entity };
 			}
 			return null;
 		}
-		List<Entity> entities = world.getLoadedEntityList();
-		for (Entity entity: entities) {
-			if (!(entity instanceof EntityPlayer)) continue;
-			EntityPlayer player = (EntityPlayer)entity;
-			if (!player.username.equals(token)) continue;
-			Entity[] out = new Entity[1];
-			out[0] = entity;
-			return out;
-		}
-		return null;
+		// Else get the player by that name
+		@Nullable Entity player = world.getPlayerEntityByName(token);
+		if (player == null) return null;
+		return new Entity[] { player };
 	}
 }

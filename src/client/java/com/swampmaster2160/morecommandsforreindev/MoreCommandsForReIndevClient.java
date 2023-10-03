@@ -2,6 +2,11 @@ package com.swampmaster2160.morecommandsforreindev;
 
 import com.fox2code.foxloader.loader.ClientMod;
 import com.swampmaster2160.morecommandsforreindev.commands.CommandSummon;
+import com.swampmaster2160.morecommandsforreindev.entitytargetselectors.EntityTargetSelectorAllEntities;
+import com.swampmaster2160.morecommandsforreindev.entitytargetselectors.EntityTargetSelectorAllPlayers;
+import com.swampmaster2160.morecommandsforreindev.entitytargetselectors.EntityTargetSelectorExecutingEntity;
+import com.swampmaster2160.morecommandsforreindev.entitytargetselectors.EntityTargetSelectorNearestPlayer;
+import com.swampmaster2160.morecommandsforreindev.entitytargetselectors.EntityTargetSelectorRandomPlayer;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableCheats;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableDimension;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableFeatures;
@@ -64,5 +69,11 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		CommandSummon.addBadEnitity(3, "FireResistantItem");
 		CommandSummon.addBadEnitity(9, "Painting");
 		CommandSummon.addBadEnitity(13, "SplashPotion");
+		// Register entity target selectors
+		EntityTargetSelector.registerTargetSelector("e", new EntityTargetSelectorAllEntities());
+		EntityTargetSelector.registerTargetSelector("a", new EntityTargetSelectorAllPlayers());
+		EntityTargetSelector.registerTargetSelector("s", new EntityTargetSelectorExecutingEntity());
+		EntityTargetSelector.registerTargetSelector("p", new EntityTargetSelectorNearestPlayer());
+		EntityTargetSelector.registerTargetSelector("r", new EntityTargetSelectorRandomPlayer());
 	}
 }
