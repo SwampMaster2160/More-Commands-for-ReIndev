@@ -82,13 +82,13 @@ public abstract class EntityTargets {
 			// Closing brackets should end the bracket content or be an error in the root evaluation
 			if (tokenString.equals(")")) {
 				if (isRoot) return true;
-				parseEnd = index;
+				parseEnd = index + 1;
 				break;
 			}
 		}
-		if (parseEnd == null) parseEnd = tokens.size() - 1;
+		if (parseEnd == null) parseEnd = tokens.size();
 		// Parse !
-		for (int index = parseEnd; index >= startIndex; index--) {
+		for (int index = parseEnd - 1; index >= startIndex; index--) {
 			Object token = tokens.get(index);
 			if (token instanceof String) {
 				String tokenString = (String)token;
@@ -102,6 +102,7 @@ public abstract class EntityTargets {
 						return true;
 					}
 					tokens.remove(index);
+					parseEnd--;
 					if (!(nextToken instanceof Entity[])) return true;
 					Entity[] nextTokenEntities = (Entity[])nextToken;
 					List<Entity> allEntities = world.getLoadedEntityList();
@@ -121,7 +122,7 @@ public abstract class EntityTargets {
 			}
 		}
 		// Parse &
-		for (int index = startIndex; index < tokens.size(); index++) {
+		for (int index = startIndex; index < parseEnd; index++) {
 			Object token = tokens.get(index);
 			if (token instanceof String) {
 				String tokenString = (String)token;
@@ -145,6 +146,7 @@ public abstract class EntityTargets {
 					tokens.remove(index);
 					tokens.remove(index);
 					tokens.remove(index);
+					parseEnd -= 2;
 					if (!(nextToken instanceof Entity[])) return true;
 					if (!(lastToken instanceof Entity[])) return true;
 					Entity[] nextTokenEntities = (Entity[])nextToken;
@@ -165,7 +167,7 @@ public abstract class EntityTargets {
 			}
 		}
 		// Parse ^
-		for (int index = startIndex; index < tokens.size(); index++) {
+		for (int index = startIndex; index < parseEnd; index++) {
 			Object token = tokens.get(index);
 			if (token instanceof String) {
 				String tokenString = (String)token;
@@ -189,6 +191,7 @@ public abstract class EntityTargets {
 					tokens.remove(index);
 					tokens.remove(index);
 					tokens.remove(index);
+					parseEnd -= 2;
 					if (!(nextToken instanceof Entity[])) return true;
 					if (!(lastToken instanceof Entity[])) return true;
 					Entity[] nextTokenEntities = (Entity[])nextToken;
@@ -219,7 +222,7 @@ public abstract class EntityTargets {
 			}
 		}
 		// Parse |
-		for (int index = startIndex; index < tokens.size(); index++) {
+		for (int index = startIndex; index < parseEnd; index++) {
 			Object token = tokens.get(index);
 			if (token instanceof String) {
 				String tokenString = (String)token;
@@ -243,6 +246,7 @@ public abstract class EntityTargets {
 					tokens.remove(index);
 					tokens.remove(index);
 					tokens.remove(index);
+					parseEnd -= 2;
 					if (!(nextToken instanceof Entity[])) return true;
 					if (!(lastToken instanceof Entity[])) return true;
 					Entity[] nextTokenEntities = (Entity[])nextToken;
