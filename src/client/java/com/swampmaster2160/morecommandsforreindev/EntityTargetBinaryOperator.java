@@ -2,7 +2,6 @@ package com.swampmaster2160.morecommandsforreindev;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.TreeSet;
 
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +22,7 @@ public abstract class EntityTargetBinaryOperator {
 			registeredOperators.put(priority, operatorsWithSamePriority);
 			priorities.add(priority);
 		}
+		operatorsWithSamePriority.put(symbol, operator);
 		registeredOperatorSymbols.add(symbol);
 	}
 
@@ -35,7 +35,7 @@ public abstract class EntityTargetBinaryOperator {
 	}
 
 	public static HashMap<Character, EntityTargetBinaryOperator> getOperatorsForPriority(int priority) {
-		return registeredOperators.get((Object)priorities);
+		return registeredOperators.get(priority);
 	}
 
 	public abstract Entity[] getResult(World world, Entity[] a, Entity[] b);

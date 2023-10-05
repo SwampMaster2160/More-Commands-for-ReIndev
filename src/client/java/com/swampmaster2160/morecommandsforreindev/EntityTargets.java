@@ -18,7 +18,7 @@ public abstract class EntityTargets {
 			// Get the char
 			char chr = string.charAt(index);
 			// Add the char as a token if it is a single char token
-			if (chr == '(' || chr == ')' || chr == '!' || chr == '|' || chr == '&' || chr == '^') {
+			if (chr == '(' || chr == ')' || chr == '!' || EntityTargetBinaryOperator.isCharAnOperator(chr)) {
 				tokensAndParsedObjects.add("" + chr);
 				continue;
 			}
@@ -28,7 +28,7 @@ public abstract class EntityTargets {
 			@Nullable Character nextChar = null;
 			if (index < string.length() - 1) nextChar = string.charAt(index + 1);
 			// If the next char should start a new token or we are at the end of the string then end the token
-			if (nextChar == null || nextChar == '(' || nextChar == ')' || nextChar == '!' || nextChar == '|' || nextChar == '&' || nextChar == '^' || nextChar == '@' || nextChar == '#') {
+			if (nextChar == null || nextChar == '(' || nextChar == ')' || nextChar == '!' || nextChar == '@' || nextChar == '#' || EntityTargetBinaryOperator.isCharAnOperator(nextChar)) {
 				// If the token on its own can be converted to a list of entities then do so
 				@Nullable Object tokenFirstRoundEvaluation = evaluateSingleToken(world, currentToken, x, y, z, executerEntity);
 				// If there is an error then return
@@ -48,7 +48,7 @@ public abstract class EntityTargets {
 
 	public static boolean evaluateTokens(World world, ArrayList<Object> tokens, int startIndex, boolean isRoot) {
 		// Find brackets and recursively parse the content of the brackets
-		@Nullable Integer parseEnd = null;
+		@Nullable Integer endIndex = null;
 		for (int index = startIndex; index < tokens.size(); index++) {
 			// Get token
 			Object token = tokens.get(index);
@@ -83,13 +83,13 @@ public abstract class EntityTargets {
 			// Closing brackets should end the bracket content or be an error in the root evaluation
 			if (tokenString.equals(")")) {
 				if (isRoot) return true;
-				parseEnd = index + 1;
+				endIndex = index + 1;
 				break;
 			}
 		}
-		if (parseEnd == null) parseEnd = tokens.size();
+		if (endIndex == null) endIndex = tokens.size();
 		// Parse !
-		for (int index = parseEnd - 1; index >= startIndex; index--) {
+		for (int index = endIndex - 1; index >= startIndex; index--) {
 			Object token = tokens.get(index);
 			if (token instanceof String) {
 				String tokenString = (String)token;
@@ -103,7 +103,7 @@ public abstract class EntityTargets {
 						return true;
 					}
 					tokens.remove(index);
-					parseEnd--;
+					endIndex--;
 					if (!(nextToken instanceof Entity[])) return true;
 					Entity[] nextTokenEntities = (Entity[])nextToken;
 					List<Entity> allEntities = world.getLoadedEntityList();
@@ -123,204 +123,39 @@ public abstract class EntityTargets {
 			}
 		}
 		// Parse binary operators
+		// For each priority
 		for (int priority: EntityTargetBinaryOperator.getPriorityIterator()) {
+			// Get the operators that have said priority
 			HashMap<Character, EntityTargetBinaryOperator> operatorsForPriority = EntityTargetBinaryOperator.getOperatorsForPriority(priority);
-			for (int index = startIndex; index < parseEnd; index++) {
+			// Loop over each token in the region to parse
+			for (int index = startIndex; index < endIndex; index++) {
+				// Get the token as a string or skip the token if it is not a string
 				Object token = tokens.get(index);
-				if (token instanceof String) continue;
+				if (!(token instanceof String)) continue;
 				String tokenString = (String)token;
+				// Get the token as a char if the char length is 1 or else skip
 				if (tokenString.length() != 1) continue;
 				char tokenChar = tokenString.charAt(0);
+				// Get the operator that the char is a symbol of or skip if there is no operator for it for this priority
 				@Nullable EntityTargetBinaryOperator operator = operatorsForPriority.get(tokenChar);
 				if (operator == null) continue;
-				if (index == startIndex) return true;
-				Object nextToken = null;
-				try {
-					nextToken = tokens.get(index + 1);
-				}
-				catch (IndexOutOfBoundsException e) {
-					return true;
-				}
-				Object lastToken = null;
-				try {
-					lastToken = tokens.get(index - 1);
-				}
-				catch (IndexOutOfBoundsException e) {
-					return true;
-				}
+				// Return if the operator is at the start or end of the parsing region
+				if (!(index > startIndex && index < endIndex - 1)) return true;
+				// Remove the operator token and point to the first operand of the operator
+				tokens.remove(index);
 				index--;
-				tokens.remove(index);
-				tokens.remove(index);
-				tokens.remove(index);
-				parseEnd -= 2;
-				if (!(nextToken instanceof Entity[])) return true;
-				if (!(lastToken instanceof Entity[])) return true;
-				Entity[] nextTokenEntities = (Entity[])nextToken;
-				Entity[] lastTokenEntities = (Entity[])lastToken;
-				Entity[] result = operator.getResult(world, lastTokenEntities, nextTokenEntities);
+				// Pop out the operands and make sure they are entitity lists. It is an error if they are not.
+				Object operandA = tokens.remove(index);
+				Object operandB = tokens.remove(index);
+				if (!((operandA instanceof Entity[]) && (operandB instanceof Entity[]))) return true;
+				// Preform the operation and add it back to the list
+				Entity[] result = operator.getResult(world, (Entity[])operandA, (Entity[])operandB);
 				tokens.add(index, result);
-				/*ArrayList<Entity> andResult = new ArrayList<Entity>();
-				for (Entity entityA: lastTokenEntities) {
-					boolean hasEntity = false;
-					for (Entity entityB: nextTokenEntities) {
-						if (entityB == entityA) {
-							hasEntity = true;
-							break;
-						}
-					}
-					if (hasEntity) andResult.add(entityA);
-				}
-				tokens.add(index, andResult.toArray(new Entity[] {}));*/
+				// In total, we removed 3 tokens and then added 1 token
+				endIndex -= 2;
 			}
 		}
-		// Parse &
-		/*for (int index = startIndex; index < parseEnd; index++) {
-			Object token = tokens.get(index);
-			if (token instanceof String) {
-				String tokenString = (String)token;
-				if (tokenString.equals("&")) {
-					if (index == startIndex) return true;
-					Object nextToken = null;
-					try {
-						nextToken = tokens.get(index + 1);
-					}
-					catch (IndexOutOfBoundsException e) {
-						return true;
-					}
-					Object lastToken = null;
-					try {
-						lastToken = tokens.get(index - 1);
-					}
-					catch (IndexOutOfBoundsException e) {
-						return true;
-					}
-					index--;
-					tokens.remove(index);
-					tokens.remove(index);
-					tokens.remove(index);
-					parseEnd -= 2;
-					if (!(nextToken instanceof Entity[])) return true;
-					if (!(lastToken instanceof Entity[])) return true;
-					Entity[] nextTokenEntities = (Entity[])nextToken;
-					Entity[] lastTokenEntities = (Entity[])lastToken;
-					ArrayList<Entity> andResult = new ArrayList<Entity>();
-					for (Entity entityA: lastTokenEntities) {
-						boolean hasEntity = false;
-						for (Entity entityB: nextTokenEntities) {
-							if (entityB == entityA) {
-								hasEntity = true;
-								break;
-							}
-						}
-						if (hasEntity) andResult.add(entityA);
-					}
-					tokens.add(index, andResult.toArray(new Entity[] {}));
-				}
-			}
-		}
-		// Parse ^
-		for (int index = startIndex; index < parseEnd; index++) {
-			Object token = tokens.get(index);
-			if (token instanceof String) {
-				String tokenString = (String)token;
-				if (tokenString.equals("^")) {
-					if (index == startIndex) return true;
-					Object nextToken = null;
-					try {
-						nextToken = tokens.get(index + 1);
-					}
-					catch (IndexOutOfBoundsException e) {
-						return true;
-					}
-					Object lastToken = null;
-					try {
-						lastToken = tokens.get(index - 1);
-					}
-					catch (IndexOutOfBoundsException e) {
-						return true;
-					}
-					index--;
-					tokens.remove(index);
-					tokens.remove(index);
-					tokens.remove(index);
-					parseEnd -= 2;
-					if (!(nextToken instanceof Entity[])) return true;
-					if (!(lastToken instanceof Entity[])) return true;
-					Entity[] nextTokenEntities = (Entity[])nextToken;
-					Entity[] lastTokenEntities = (Entity[])lastToken;
-					ArrayList<Entity> xorResult = new ArrayList<Entity>();
-					for (Entity entityA: lastTokenEntities) {
-						boolean hasEntity = false;
-						for (Entity entityB: nextTokenEntities) {
-							if (entityB == entityA) {
-								hasEntity = true;
-								break;
-							}
-						}
-						if (!hasEntity) xorResult.add(entityA);
-					}
-					for (Entity entityA: nextTokenEntities) {
-						boolean hasEntity = false;
-						for (Entity entityB: lastTokenEntities) {
-							if (entityB == entityA) {
-								hasEntity = true;
-								break;
-							}
-						}
-						if (!hasEntity) xorResult.add(entityA);
-					}
-					tokens.add(index, xorResult.toArray(new Entity[] {}));
-				}
-			}
-		}
-		// Parse |
-		for (int index = startIndex; index < parseEnd; index++) {
-			Object token = tokens.get(index);
-			if (token instanceof String) {
-				String tokenString = (String)token;
-				if (tokenString.equals("|")) {
-					if (index == startIndex) return true;
-					Object nextToken = null;
-					try {
-						nextToken = tokens.get(index + 1);
-					}
-					catch (IndexOutOfBoundsException e) {
-						return true;
-					}
-					Object lastToken = null;
-					try {
-						lastToken = tokens.get(index - 1);
-					}
-					catch (IndexOutOfBoundsException e) {
-						return true;
-					}
-					index--;
-					tokens.remove(index);
-					tokens.remove(index);
-					tokens.remove(index);
-					parseEnd -= 2;
-					if (!(nextToken instanceof Entity[])) return true;
-					if (!(lastToken instanceof Entity[])) return true;
-					Entity[] nextTokenEntities = (Entity[])nextToken;
-					Entity[] lastTokenEntities = (Entity[])lastToken;
-					ArrayList<Entity> orResult = new ArrayList<Entity>();
-					for (Entity entity: nextTokenEntities) {
-						orResult.add(entity);
-					}
-					for (Entity entityA: lastTokenEntities) {
-						boolean hasEntity = false;
-						for (Entity entityB: nextTokenEntities) {
-							if (entityB == entityA) {
-								hasEntity = true;
-								break;
-							}
-						}
-						if (!hasEntity) orResult.add(entityA);
-					}
-					tokens.add(index, orResult.toArray(new Entity[] {}));
-				}
-			}
-		}*/
+		// Returning false means there was no error
 		return false;
 	}
 
@@ -337,8 +172,6 @@ public abstract class EntityTargets {
 	 * The input string if the input string cannot be converted.
 	 */
 	public static @Nullable Object evaluateSingleToken(World world, String token, double x, double y, double z, @Nullable Entity executerEntity) {
-		// Return tokens that cannot be converted
-		if (token == "(" || token == ")" || token == "!" || token == "|" || token == "&" || token == "^") return token;
 		// Tokens starting with @ are target selectors
 		if (token.startsWith("@")) {
 			String tokenWithoutPrefix = token.substring(1);
