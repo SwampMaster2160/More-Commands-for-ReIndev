@@ -28,7 +28,7 @@ public abstract class EntityTargets {
 			@Nullable Character nextChar = null;
 			if (index < string.length() - 1) nextChar = string.charAt(index + 1);
 			// If the next char should start a new token or we are at the end of the string then end the token
-			if (nextChar == null || nextChar == '(' || nextChar == ')' || nextChar == '!' || nextChar == '@' || nextChar == '#' || EntityTargetBinaryOperator.isCharAnOperator(nextChar)) {
+			if (nextChar == null || nextChar == '(' || nextChar == ')' || nextChar == '!' || nextChar == '@' || nextChar == '#' || nextChar == '%' || EntityTargetBinaryOperator.isCharAnOperator(nextChar)) {
 				// If the token on its own can be converted to a list of entities then do so
 				@Nullable Object tokenFirstRoundEvaluation = evaluateSingleToken(world, currentToken, x, y, z, executerEntity);
 				// If there is an error then return
@@ -190,6 +190,23 @@ public abstract class EntityTargets {
 			// Parse the number
 			String tokenWithoutPrefix = token.substring(1);
 			int entityInstanceId;
+			try {
+				entityInstanceId = Integer.parseInt(tokenWithoutPrefix);
+			}
+			catch (NumberFormatException e) {
+				return null;
+			}
+			// Get the entity with the id
+			for (Entity entity: world.getLoadedEntityList()) {
+				if (entity.entityId == entityInstanceId) return new Entity[] { entity };
+			}
+			return null;
+		}
+		// Tokens starting with % select an entity by its entity name/id
+		if (token.startsWith("%")) {
+			// Parse the number
+			String tokenWithoutPrefix = token.substring(1);
+			//int entityInstanceId;
 			try {
 				entityInstanceId = Integer.parseInt(tokenWithoutPrefix);
 			}
