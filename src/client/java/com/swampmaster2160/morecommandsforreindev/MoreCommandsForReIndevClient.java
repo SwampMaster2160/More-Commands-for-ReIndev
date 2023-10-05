@@ -2,6 +2,9 @@ package com.swampmaster2160.morecommandsforreindev;
 
 import com.fox2code.foxloader.loader.ClientMod;
 import com.swampmaster2160.morecommandsforreindev.commands.CommandSummon;
+import com.swampmaster2160.morecommandsforreindev.entitytargetbinaryoperator.EntityTargetBinaryOperatorAnd;
+import com.swampmaster2160.morecommandsforreindev.entitytargetbinaryoperator.EntityTargetBinaryOperatorOr;
+import com.swampmaster2160.morecommandsforreindev.entitytargetbinaryoperator.EntityTargetBinaryOperatorXor;
 import com.swampmaster2160.morecommandsforreindev.entitytargetselectors.EntityTargetSelectorAllEntities;
 import com.swampmaster2160.morecommandsforreindev.entitytargetselectors.EntityTargetSelectorAllPlayers;
 import com.swampmaster2160.morecommandsforreindev.entitytargetselectors.EntityTargetSelectorExecutingEntity;
@@ -75,5 +78,9 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		EntityTargetSelector.registerTargetSelector("s", new EntityTargetSelectorExecutingEntity());
 		EntityTargetSelector.registerTargetSelector("p", new EntityTargetSelectorNearestPlayer());
 		EntityTargetSelector.registerTargetSelector("r", new EntityTargetSelectorRandomPlayer());
+		// Register entity target binary operators
+		EntityTargetBinaryOperator.registerOperator('&', 1000, new EntityTargetBinaryOperatorAnd());
+		EntityTargetBinaryOperator.registerOperator('^', 2000, new EntityTargetBinaryOperatorXor());
+		EntityTargetBinaryOperator.registerOperator('|', 3000, new EntityTargetBinaryOperatorOr());
 	}
 }

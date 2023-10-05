@@ -1,6 +1,7 @@
 package com.swampmaster2160.morecommandsforreindev;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
@@ -121,8 +122,59 @@ public abstract class EntityTargets {
 				}
 			}
 		}
+		// Parse binary operators
+		for (int priority: EntityTargetBinaryOperator.getPriorityIterator()) {
+			HashMap<Character, EntityTargetBinaryOperator> operatorsForPriority = EntityTargetBinaryOperator.getOperatorsForPriority(priority);
+			for (int index = startIndex; index < parseEnd; index++) {
+				Object token = tokens.get(index);
+				if (token instanceof String) continue;
+				String tokenString = (String)token;
+				if (tokenString.length() != 1) continue;
+				char tokenChar = tokenString.charAt(0);
+				@Nullable EntityTargetBinaryOperator operator = operatorsForPriority.get(tokenChar);
+				if (operator == null) continue;
+				if (index == startIndex) return true;
+				Object nextToken = null;
+				try {
+					nextToken = tokens.get(index + 1);
+				}
+				catch (IndexOutOfBoundsException e) {
+					return true;
+				}
+				Object lastToken = null;
+				try {
+					lastToken = tokens.get(index - 1);
+				}
+				catch (IndexOutOfBoundsException e) {
+					return true;
+				}
+				index--;
+				tokens.remove(index);
+				tokens.remove(index);
+				tokens.remove(index);
+				parseEnd -= 2;
+				if (!(nextToken instanceof Entity[])) return true;
+				if (!(lastToken instanceof Entity[])) return true;
+				Entity[] nextTokenEntities = (Entity[])nextToken;
+				Entity[] lastTokenEntities = (Entity[])lastToken;
+				Entity[] result = operator.getResult(world, lastTokenEntities, nextTokenEntities);
+				tokens.add(index, result);
+				/*ArrayList<Entity> andResult = new ArrayList<Entity>();
+				for (Entity entityA: lastTokenEntities) {
+					boolean hasEntity = false;
+					for (Entity entityB: nextTokenEntities) {
+						if (entityB == entityA) {
+							hasEntity = true;
+							break;
+						}
+					}
+					if (hasEntity) andResult.add(entityA);
+				}
+				tokens.add(index, andResult.toArray(new Entity[] {}));*/
+			}
+		}
 		// Parse &
-		for (int index = startIndex; index < parseEnd; index++) {
+		/*for (int index = startIndex; index < parseEnd; index++) {
 			Object token = tokens.get(index);
 			if (token instanceof String) {
 				String tokenString = (String)token;
@@ -268,7 +320,7 @@ public abstract class EntityTargets {
 					tokens.add(index, orResult.toArray(new Entity[] {}));
 				}
 			}
-		}
+		}*/
 		return false;
 	}
 

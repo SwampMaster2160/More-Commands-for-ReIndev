@@ -30,15 +30,13 @@ public abstract class EntityTargetBinaryOperator {
 		return registeredOperatorSymbols.contains(symbol);
 	}
 
-	public static Iterator<Integer> getPriorityIterator() {
-		return priorities.iterator();
+	public static Iterable<Integer> getPriorityIterator() {
+		return priorities;
 	}
 
 	public static HashMap<Character, EntityTargetBinaryOperator> getOperatorsForPriority(int priority) {
-		return registeredOperators.get(priorities);
+		return registeredOperators.get((Object)priorities);
 	}
 
-	public abstract Entity[] getResult(World world, Entity[] a, Entity[] b) {
-
-	}
+	public abstract Entity[] getResult(World world, Entity[] a, Entity[] b);
 }
