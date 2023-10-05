@@ -89,38 +89,42 @@ public abstract class EntityTargets {
 		}
 		if (endIndex == null) endIndex = tokens.size();
 		// Parse !
+		// Go over each char in the parsing area in reverse
 		for (int index = endIndex - 1; index >= startIndex; index--) {
+			// Get the token as a string or return if it is not a string
 			Object token = tokens.get(index);
-			if (token instanceof String) {
-				String tokenString = (String)token;
-				if (tokenString.equals("!")) {
-					tokens.remove(index);
-					Object nextToken = null;
-					try {
-						nextToken = tokens.get(index);
+			if (!(token instanceof String)) continue;
+			String tokenString = (String)token;
+			// Skip token if it is not a not operator
+			if (!tokenString.equals("!")) continue;
+			// Return if the operator is at the end of the parsing region
+			if (!(index < endIndex - 1)) return true;
+			// Remove not operator
+			tokens.remove(index);
+			// Pop out the operand
+			Object nextToken = tokens.remove(index);
+			// Get the operand as an entity list. It is an error if it is not so.
+			if (!(nextToken instanceof Entity[])) return true;
+			Entity[] nextTokenEntities = (Entity[])nextToken;
+			// Get a list of all entities and create a result array;
+			List<Entity> allEntities = world.getLoadedEntityList();
+			ArrayList<Entity> notResult = new ArrayList<Entity>();
+			// For each entity in the world
+			for (Entity entity: allEntities) {
+				// Add the world entity to the list if it is not in the operand list
+				boolean hasEntity = true;
+				for (Entity nextEntity: nextTokenEntities) {
+					if (nextEntity == entity) {
+						hasEntity = false;
+						break;
 					}
-					catch (IndexOutOfBoundsException e) {
-						return true;
-					}
-					tokens.remove(index);
-					endIndex--;
-					if (!(nextToken instanceof Entity[])) return true;
-					Entity[] nextTokenEntities = (Entity[])nextToken;
-					List<Entity> allEntities = world.getLoadedEntityList();
-					ArrayList<Entity> notResult = new ArrayList<Entity>();
-					for (Entity entity: allEntities) {
-						boolean hasEntity = true;
-						for (Entity nextEntity: nextTokenEntities) {
-							if (nextEntity == entity) {
-								hasEntity = false;
-								break;
-							}
-						}
-						if (hasEntity) notResult.add(entity);
-					}
-					tokens.add(index, notResult.toArray(new Entity[] {}));
 				}
+				if (hasEntity) notResult.add(entity);
 			}
+			// Add the result list back to the tokens list
+			tokens.add(index, notResult.toArray(new Entity[] {}));
+			// In total we removed 2 tokens and added 1
+			endIndex--;
 		}
 		// Parse binary operators
 		// For each priority
