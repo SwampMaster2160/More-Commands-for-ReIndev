@@ -7,6 +7,7 @@ Made by SwampMaster2160 and currently singleplayer only.
 Commands Added:
 
 * `/kill [targets]`
+* `/listentities [targets]`
 * `/seed`
 * `/setWorldSpawn [x y z]`
 * `/summon <entity name or id> [x y z]`
