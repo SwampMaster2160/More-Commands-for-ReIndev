@@ -7,6 +7,7 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.src.game.entity.Entity;
+import net.minecraft.src.game.entity.EntityList;
 import net.minecraft.src.game.level.World;
 
 public abstract class EntityTargets {
@@ -204,20 +205,26 @@ public abstract class EntityTargets {
 		}
 		// Tokens starting with % select an entity by its entity name/id
 		if (token.startsWith("%")) {
-			// Parse the number
 			String tokenWithoutPrefix = token.substring(1);
-			//int entityInstanceId;
+			// If a number is used then return entities with that id
 			try {
-				entityInstanceId = Integer.parseInt(tokenWithoutPrefix);
+				int entityId = Integer.parseInt(tokenWithoutPrefix);
+				ArrayList<Entity> entitiesWithId = new ArrayList<Entity>();
+				for (Entity entity: world.getLoadedEntityList()) {
+					if (EntityList.getEntityString(entity) == null) continue;
+					if (EntityList.getEntityID(entity) == entityId) entitiesWithId.add(entity);
+				}
+				return entitiesWithId.toArray(new Entity[] {});
 			}
-			catch (NumberFormatException e) {
-				return null;
-			}
-			// Get the entity with the id
+			catch (NumberFormatException e) {};
+			// Else return entities with the name
+			ArrayList<Entity> entitiesWithName = new ArrayList<Entity>();
 			for (Entity entity: world.getLoadedEntityList()) {
-				if (entity.entityId == entityInstanceId) return new Entity[] { entity };
+				@Nullable String entityName = EntityList.getEntityString(entity);
+				if (entityName == null) continue;
+				if (entityName.equals(tokenWithoutPrefix)) entitiesWithName.add(entity);
 			}
-			return null;
+			return entitiesWithName.toArray(new Entity[] {});
 		}
 		// Else get the player by that name
 		@Nullable Entity player = world.getPlayerEntityByName(token);

@@ -49,6 +49,7 @@ Entity Target Selectors:
 * `@p`
 * `@r`
 * `#<entity instance ID>`
+* `%<entity ID/name>`
 
 Operators for Entity Target Selections
 * `()`
