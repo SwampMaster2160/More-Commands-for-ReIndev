@@ -20,6 +20,7 @@ foxloader {
     modDesc = "Adds more commands to ReIndev"
     clientMod = "com.swampmaster2160.morecommandsforreindev.MoreCommandsForReIndevClient"
     serverMod = "com.swampmaster2160.morecommandsforreindev.MoreCommandsForReIndevServer"
+    setUsername("SwampMaster2160")
     // Development tools don't like that both client and server define
     // the same classes, so uncomment to disable the side inclusion.
     // includeClient = false
