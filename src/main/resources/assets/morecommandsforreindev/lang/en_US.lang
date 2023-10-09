@@ -16,11 +16,11 @@ command.summon.summon: Summoned an entity with id %n/%i at (%x, %y, %z).
 command.summon.unable_to_summon: §cUnable to summon entity.
 command.kill: Kill entities.
 command.kill.kill_multi: Killed %c entities.
-command.kill.kill_multi_entity: Killed %c %n(s).
+command.kill.kill_multi_of_type: Killed %c %n(s).
 command.kill.kill_multi_player: Killed %c players.
 command.kill.kill_none: §cCould not kill anything because no entities where targeted.
 command.kill.kill_one: Killed 1 entity.
-command.kill.kill_one_entity: Killed 1 %n.
+command.kill.kill_one_of_type: Killed 1 %n.
 command.kill.kill_one_player: Killed player %n.
 command.kill.target_syntax_error: §cSyntax error while parsing targets.
 command.listentities.target_syntax_error: §cSyntax error while parsing targets.
@@ -30,5 +30,9 @@ command.listentities.entity_info_no_name: Instance id: %a at (%x, %y, %z).
 command.listentities.entity_info_player: Player %n with instance id: %a at (%x, %y, %z).
 command.tp.target_syntax_error: §cSyntax error while parsing targets.
 command.tp.tp_multi: Teleported %c entities.
-command.tp.tp_none: No entities where targeted.
+command.tp.tp_multi_of_type: Teleported %c %n(s).
+command.tp.tp_multi_player: Teleported %c players.
+command.tp.tp_none: §cCould not teleport anything because no entities where targeted.
 command.tp.tp_one: Teleported 1 entity.
+command.tp.tp_one_of_type: Teleported 1 %n.
+command.tp.tp_one_player: Teleported player %n.

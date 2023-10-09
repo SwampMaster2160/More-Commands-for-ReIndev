@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.swampmaster2160.morecommandsforreindev.EntitiesTargeted;
 import com.swampmaster2160.morecommandsforreindev.EntityTargets;
 import com.swampmaster2160.morecommandsforreindev.MoreCommandsForReIndev;
 
@@ -54,19 +55,10 @@ public class MixinCommandTP {
 			targetEntity.setPosition(x, y, z);
 		}
 		// Print message
-		// Print kill message
-		if (targets.length == 0) {
-			String message = StatCollector.translateToLocal("command.tp.tp_none");
-			commandExecutor.addChatMessage(message);
-			return;
-		}
-		if (targets.length == 1) {
-			String message = StatCollector.translateToLocal("command.tp.tp_one");
-			commandExecutor.addChatMessage(message);
-			return;
-		}
-		String message = StatCollector.translateToLocal("command.tp.tp_multi")
-			.replace("%c", "" + targets.length);
+		EntitiesTargeted entitiesTargeted = EntitiesTargeted.fromEntityArray(targets);
+		String message = StatCollector.translateToLocal("command.tp.tp_" + entitiesTargeted.getTranslationString())
+			.replace("%c", "" + entitiesTargeted.count);
+		if (entitiesTargeted.name != null) message = message.replace("%n", entitiesTargeted.name);
 		commandExecutor.addChatMessage(message);
 	}
 }
