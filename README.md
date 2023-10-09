@@ -14,6 +14,10 @@ Commands Added:
 * `/toggledownfall`
 * `/worldInfo <variable> [new value]`
 
+Commands Changed:
+
+* `/tp`
+
 World Info Variables:
 
 * `seed`
