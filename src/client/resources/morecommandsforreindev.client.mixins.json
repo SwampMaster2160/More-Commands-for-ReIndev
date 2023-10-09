@@ -6,6 +6,7 @@
   "mixins": [
     "MixinPlayerCommandHandler",
     "MixinWorldInfo",
-    "MixinWorld"
+    "MixinWorld",
+    "MixinCommandTP"
   ]
 }

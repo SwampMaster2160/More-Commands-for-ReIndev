@@ -24,3 +24,7 @@ command.listentities: List info about some targeted entities.
 command.listentities.entity_info: %n/%i with instance id: %a at (%x, %y, %z).
 command.listentities.entity_info_no_name: Instance id: %a at (%x, %y, %z).
 command.listentities.entity_info_player: Player %n with instance id: %a at (%x, %y, %z).
+command.tp.target_syntax_error: §cSyntax error while parsing targets.
+command.tp.tp_multi: Teleported %c entities.
+command.tp.tp_none: No entities where targeted.
+command.tp.tp_one: Teleported 1 entity.
