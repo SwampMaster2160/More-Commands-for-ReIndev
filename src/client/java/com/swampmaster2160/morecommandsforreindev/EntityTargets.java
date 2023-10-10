@@ -6,12 +6,13 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.src.client.player.EntityPlayerSP;
 import net.minecraft.src.game.entity.Entity;
 import net.minecraft.src.game.entity.EntityList;
 import net.minecraft.src.game.level.World;
 
 public abstract class EntityTargets {
-	public static @Nullable Entity[] getTargetsFromSelectorString(World world, String string, double x, double y, double z, Entity executerEntity) {
+	public static @Nullable Entity[] getTargetsFromSelectorString(World world, String string, double x, double y, double z, Entity executerEntity, boolean playersOnly) {
 		ArrayList<Object> tokensAndParsedObjects = new ArrayList<Object>();
 		// Loop over each char in the string to convert the string to tokens
 		@Nullable String currentToken = "";
@@ -44,7 +45,13 @@ public abstract class EntityTargets {
 		if (hasError) return null;
 		// Return the first token and should be only token
 		if (tokensAndParsedObjects.size() != 1) return null;
-		return (Entity[])(tokensAndParsedObjects.get(0));
+		// Strip non-players if set and return
+		if (!playersOnly) return (Entity[])(tokensAndParsedObjects.get(0));
+		ArrayList<Entity> players = new ArrayList<Entity>();
+		for (Entity entity : (Entity[])(tokensAndParsedObjects.get(0))) {
+			if (entity instanceof EntityPlayerSP) players.add(entity);
+		}
+		return players.toArray(new Entity[] {});
 	}
 
 	public static boolean evaluateTokens(World world, ArrayList<Object> tokens, int startIndex, boolean isRoot) {

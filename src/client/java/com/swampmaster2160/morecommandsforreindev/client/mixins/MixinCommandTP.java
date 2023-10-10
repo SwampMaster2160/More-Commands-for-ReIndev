@@ -36,7 +36,7 @@ public class MixinCommandTP {
 		// Get world object
 		World world = commandExecutor.worldObj;
 		// Get targets
-		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, targetsArg, commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor);
+		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, targetsArg, commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor, false);
 		if (targets == null) {
 			String message = StatCollector.translateToLocal("command.tp.target_syntax_error");
 			commandExecutor.addChatMessage(message);

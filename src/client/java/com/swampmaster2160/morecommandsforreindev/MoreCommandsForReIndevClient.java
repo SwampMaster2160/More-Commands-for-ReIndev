@@ -1,5 +1,7 @@
 package com.swampmaster2160.morecommandsforreindev;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.fox2code.foxloader.loader.ClientMod;
 import com.swampmaster2160.morecommandsforreindev.commands.CommandSummon;
 import com.swampmaster2160.morecommandsforreindev.entitytargetbinaryoperator.EntityTargetBinaryOperatorAnd;
@@ -82,5 +84,13 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		EntityTargetBinaryOperator.registerOperator('&', 1000, new EntityTargetBinaryOperatorAnd());
 		EntityTargetBinaryOperator.registerOperator('^', 2000, new EntityTargetBinaryOperatorXor());
 		EntityTargetBinaryOperator.registerOperator('|', 3000, new EntityTargetBinaryOperatorOr());
+	}
+
+	public static @Nullable Integer getItemId(String itemIdOrName) {
+		return null;
+	}
+
+	public static @Nullable Integer getItemMetadata(String itemIdOrName) {
+		return null;
 	}
 }

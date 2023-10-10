@@ -30,7 +30,7 @@ public class CommandListEntities extends Command {
 		// Get targets
 		String targetsString = "@e";
 		if (args.length == 2) targetsString = args[1];
-		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, targetsString, commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor);
+		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, targetsString, commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor, false);
 		// Print a syntax error if there was a syntax error parsing the targets
 		if (targets == null) {
 			String message = StatCollector.translateToLocal("command.listentities.target_syntax_error");

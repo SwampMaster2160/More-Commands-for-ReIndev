@@ -7,6 +7,7 @@
     "MixinPlayerCommandHandler",
     "MixinWorldInfo",
     "MixinWorld",
-    "MixinCommandTP"
+    "MixinCommandTP",
+    "MixinCommandGive"
   ]
 }
