@@ -17,6 +17,7 @@ Commands Added:
 Commands Changed:
 
 * `/tp`
+* `/give`
 
 World Info Variables:
 

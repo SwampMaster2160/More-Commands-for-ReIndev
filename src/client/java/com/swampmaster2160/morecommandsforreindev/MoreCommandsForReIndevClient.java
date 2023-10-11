@@ -38,6 +38,9 @@ import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVar
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableWorldName;
 import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVariableWorldTime;
 
+import net.minecraft.src.game.item.Item;
+import net.minecraft.src.game.item.ItemBlock;
+
 public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev implements ClientMod {
 	@Override
 	public void onInit() {
@@ -86,11 +89,44 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		EntityTargetBinaryOperator.registerOperator('|', 3000, new EntityTargetBinaryOperatorOr());
 	}
 
-	public static @Nullable Integer getItemId(String itemIdOrName) {
-		return null;
+	public static @Nullable Integer getItemId(String itemIdOrNameAndMetadata) {
+		// Get string without metadata part
+		String itemIdOrNameString = itemIdOrNameAndMetadata;
+		if (itemIdOrNameAndMetadata.contains(":")) itemIdOrNameString = itemIdOrNameAndMetadata.split(":")[0];
+		// Parse id and return null if it is not a valid int or item name
+		int id = 0;
+		try {
+			id = Integer.parseInt(Item.getItemByName(itemIdOrNameString));
+		}
+		catch (NumberFormatException e) {
+			return null;
+		}
+		// Return null if the item id does not match to an item
+		try {
+			if (id < 0 || Item.itemsList[id] == null) return null;
+		}
+		catch (IndexOutOfBoundsException e) {
+			return null;
+		}
+		// Return the valid id
+		return id;
 	}
 
-	public static @Nullable Integer getItemMetadata(String itemIdOrName) {
-		return null;
+	public static @Nullable Integer getItemMetadata(int id, String itemIdOrNameAndMetadata) {
+		// Get string metadata part
+		if (!itemIdOrNameAndMetadata.contains(":")) return 0;
+		String metadataString = itemIdOrNameAndMetadata.split(":")[1];
+		// Parse id
+		int metadata = 0;
+		try {
+			metadata = Integer.parseInt(metadataString);
+		}
+		catch (NumberFormatException e) {
+			return null;
+		}
+		// Validate metadata
+		if (metadata < 0 || (Item.itemsList[id] instanceof ItemBlock && metadata > 15)) return null;
+		// Return valid metadata
+		return metadata;
 	}
 }
