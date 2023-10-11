@@ -33,7 +33,7 @@ public class CommandListEntities extends Command {
 		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, targetsString, commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor, false);
 		// Print a syntax error if there was a syntax error parsing the targets
 		if (targets == null) {
-			String message = StatCollector.translateToLocal("command.listentities.target_syntax_error");
+			String message = StatCollector.translateToLocal("command.target_syntax_error");
 			commandExecutor.addChatMessage(message);
 			return;
 		}

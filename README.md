@@ -4,6 +4,11 @@ More commands mod for [ReIndev](https://reindev.miraheze.org/wiki/Reindev_Wiki) 
 
 Made by SwampMaster2160 and currently singleplayer only.
 
+Syntax:
+
+* `<argument>`: Compulsory Argument
+* `[argument]`: Optional Argument
+
 Commands Added:
 
 * `/kill [targets]`
@@ -16,8 +21,9 @@ Commands Added:
 
 Commands Changed:
 
-* `/tp`
-* `/give`
+* `/tp [targets] <x> <y> <z>`
+* `/give <targets> <item id/name>[:metadata] [count]`
+* `/clear [targets] [item id/name][:metadata] [max items to remove]`
 
 World Info Variables:
 

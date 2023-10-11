@@ -33,20 +33,20 @@ public class MixinCommandGive {
 		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, args[1], commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor, true);
 		// Print a syntax error if there was a syntax error parsing the targets
 		if (targets == null) {
-			String message = StatCollector.translateToLocal("command.give.target_syntax_error");
+			String message = StatCollector.translateToLocal("command.target_syntax_error");
 			commandExecutor.addChatMessage(message);
 			return;
 		}
 		// Get item id and metadata
 		@Nullable Integer itemId = MoreCommandsForReIndevClient.getItemId(args[2]);
 		if (itemId == null) {
-			String message = StatCollector.translateToLocal("command.give.invalid_id");
+			String message = StatCollector.translateToLocal("command.invalid_id");
 			commandExecutor.addChatMessage(message);
 			return;
 		}
-		@Nullable Integer metadata = MoreCommandsForReIndevClient.getItemMetadata(itemId, args[2]);
+		@Nullable Integer metadata = MoreCommandsForReIndevClient.getItemMetadata(itemId, args[2], 0);
 		if (metadata == null) {
-			String message = StatCollector.translateToLocal("command.give.invalid_metadata");
+			String message = StatCollector.translateToLocal("command.invalid_metadata");
 			commandExecutor.addChatMessage(message);
 			return;
 		}

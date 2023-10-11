@@ -22,13 +22,10 @@ command.kill.kill_none: §cCould not kill anything because no entities where tar
 command.kill.kill_one: Killed 1 entity.
 command.kill.kill_one_of_type: Killed 1 %n.
 command.kill.kill_one_player: Killed player %n.
-command.kill.target_syntax_error: §cSyntax error while parsing targets.
-command.listentities.target_syntax_error: §cSyntax error while parsing targets.
 command.listentities: List info about some targeted entities.
 command.listentities.entity_info: %n/%i with instance id: %a at (%x, %y, %z).
 command.listentities.entity_info_no_name: Instance id: %a at (%x, %y, %z).
 command.listentities.entity_info_player: Player %n with instance id: %a at (%x, %y, %z).
-command.tp.target_syntax_error: §cSyntax error while parsing targets.
 command.tp.tp_multi: Teleported %c entities.
 command.tp.tp_multi_of_type: Teleported %c %n(s).
 command.tp.tp_multi_player: Teleported %c players.
@@ -36,10 +33,14 @@ command.tp.tp_none: §cCould not teleport anything because no entities where tar
 command.tp.tp_one: Teleported 1 entity.
 command.tp.tp_one_of_type: Teleported 1 %n.
 command.tp.tp_one_player: Teleported player %n.
-command.give.target_syntax_error: §cSyntax error while parsing targets.
-command.give.invalid_id: §cInvalid item id.
-command.give.invalid_metadata: §cInvalid item metadata.
 command.give.invalid_count: §cInvalid amount of items to give.
 command.give.give_none: §cCould not give any items because no players were targeted.
 command.give.give_multi_player: Gave %l × %i:%m each to %c players.
 command.give.give_one_player: Gave %l × %i:%m to %n.
+command.clear.invalid_count: §cInvalid amount of items to remove.
+command.clear.clear_none: §cCould not remove any items because no players were targeted.
+command.clear.clear_multi_player: Removed a total of %t items from %c players inventories.
+command.clear.clear_one_player: Removed %t items from %n's inventory.
+command.invalid_id: §cInvalid item id.
+command.invalid_metadata: §cInvalid item metadata.
+command.target_syntax_error: §cSyntax error while parsing targets.

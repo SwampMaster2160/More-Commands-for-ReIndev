@@ -37,7 +37,7 @@ public class CommandKill extends Command {
 		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, args[1], commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor, false);
 		// Print a syntax error if there was a syntax error parsing the targets
 		if (targets == null) {
-			String message = StatCollector.translateToLocal("command.kill.target_syntax_error");
+			String message = StatCollector.translateToLocal("command.target_syntax_error");
 			commandExecutor.addChatMessage(message);
 			return;
 		}

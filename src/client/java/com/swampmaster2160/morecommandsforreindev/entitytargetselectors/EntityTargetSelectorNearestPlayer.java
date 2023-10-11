@@ -10,7 +10,7 @@ import net.minecraft.src.game.level.World;
 public class EntityTargetSelectorNearestPlayer extends EntityTargetSelector {
 	@Override
 	public Entity[] getSelectedEntities(World world, double x, double y, double z, @Nullable Entity executerEntity) {
-		@Nullable Entity entity = world.getClosestPlayer(x, y, z, 0);
+		@Nullable Entity entity = world.getClosestPlayer(x, y, z, Double.POSITIVE_INFINITY);
 		if (entity == null) return new Entity[] {};
 		return new Entity[] { entity };
 	}

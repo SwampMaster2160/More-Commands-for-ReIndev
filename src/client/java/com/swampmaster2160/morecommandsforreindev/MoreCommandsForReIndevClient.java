@@ -1,5 +1,7 @@
 package com.swampmaster2160.morecommandsforreindev;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.fox2code.foxloader.loader.ClientMod;
@@ -40,6 +42,7 @@ import com.swampmaster2160.morecommandsforreindev.worldinfovariable.WorldInfoVar
 
 import net.minecraft.src.game.item.Item;
 import net.minecraft.src.game.item.ItemBlock;
+import net.minecraft.src.game.item.ItemStack;
 
 public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev implements ClientMod {
 	@Override
@@ -112,9 +115,9 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		return id;
 	}
 
-	public static @Nullable Integer getItemMetadata(int id, String itemIdOrNameAndMetadata) {
+	public static @Nullable Integer getItemMetadata(int id, String itemIdOrNameAndMetadata, int deafult) {
 		// Get string metadata part
-		if (!itemIdOrNameAndMetadata.contains(":")) return 0;
+		if (!itemIdOrNameAndMetadata.contains(":")) return deafult;
 		String metadataString = itemIdOrNameAndMetadata.split(":")[1];
 		// Parse id
 		int metadata = 0;
@@ -128,5 +131,41 @@ public class MoreCommandsForReIndevClient extends MoreCommandsForReIndev impleme
 		if (metadata < 0 || (Item.itemsList[id] instanceof ItemBlock && metadata > 15)) return null;
 		// Return valid metadata
 		return metadata;
+	}
+
+	/**
+	 * Removes matching items from stacks.
+	 * @param stacks The stacks to remove items from
+	 * @param itemId Only items with this id are removed, all otherwise matching items are removed if null.
+	 * @param itemMetadata Only items with this metadata are removed, all otherwise matching items are removed if null.
+	 * @param itemsLeftToRemove The max amount of items to remove, null allows for infinite items to be removed. Decremented by the amount of items removed if not null.
+	 * @return The total amount of items that where removed
+	 */
+	public static int removeItemsFromStacks(ItemStack[] stacks, @Nullable Integer itemId, @Nullable Integer itemMetadata, @Nullable AtomicInteger itemsLeftToRemove) {
+		int itemsRemoved = 0;
+		// For each item stack or until we have reached the limit of items to remove
+		for (int stackIndex = 0; stackIndex < stacks.length && (itemsLeftToRemove == null || itemsLeftToRemove.get() > 0); stackIndex++) {
+			ItemStack stack = stacks[stackIndex];
+			// Skip if the stack is empty or it's item does not mach our restrictions.
+			if (stack == null || (itemId != null && stack.itemID != itemId) || (itemMetadata != null && stack.itemDamage != itemMetadata)) continue;
+			// Remove the whole stack if we have unlimited items to remove
+			if (itemsLeftToRemove == null) {
+				itemsRemoved += stack.stackSize;
+				stacks[stackIndex] = null;
+				continue;
+			}
+			// Remove the whole stack if the stack if we can without reaching the limit of items to remove
+			if (stack.stackSize <= itemsLeftToRemove.get()) {
+				itemsRemoved += stack.stackSize;
+				itemsLeftToRemove.set(itemsLeftToRemove.get() - stack.stackSize);
+				stacks[stackIndex] = null;
+				continue;
+			}
+			// Else remove as many items from the stack as we can
+			itemsRemoved += itemsLeftToRemove.get();
+			stack.stackSize -= itemsLeftToRemove.get();
+			itemsLeftToRemove.set(0);
+		}
+		return itemsRemoved;
 	}
 }
