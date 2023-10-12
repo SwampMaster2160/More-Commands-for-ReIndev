@@ -43,4 +43,10 @@ command.clear.clear_multi_player: Removed a total of %t items from %c players in
 command.clear.clear_one_player: Removed %t items from %n's inventory.
 command.invalid_id: §cInvalid item id.
 command.invalid_metadata: §cInvalid item metadata.
-command.target_syntax_error: §cSyntax error while parsing targets.
+entity_targets.invalid_target_selector: §cInvalid target selector: §r%t
+entity_targets.instance_selector_not_int: %t §cwas given as an instance selector but was not in the #<int> format.
+entity_targets.too_many_opening_brackets: §cEntity targeter has more opening brackets then closing brackets.
+entity_targets.too_many_closing_brackets: §cEntity targeter has more closing brackets then opening brackets.
+entity_targets.brackets_with_no_content: §cEntity targeter contains brackets with no content.
+entity_targets.operator_at_expression_end: %o §coperator at the end of an expression.
+entity_targets.operator_used_on_not_expression: %o §cwas used on something other than an expression.

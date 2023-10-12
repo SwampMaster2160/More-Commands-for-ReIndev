@@ -33,12 +33,8 @@ public class MixinCommandClear {
 		// Get targets
 		Entity[] targets = { commandExecutor };
 		if (args.length > 1) {
-			@Nullable Entity[] targetsFromSelector = EntityTargets.getTargetsFromSelectorString(world, args[1], commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor, true);
-			if (targetsFromSelector == null) {
-				String message = StatCollector.translateToLocal("command.target_syntax_error");
-				commandExecutor.addChatMessage(message);
-				return;
-			}
+			@Nullable Entity[] targetsFromSelector = EntityTargets.getTargetsFromSelectorString(world, args[1], commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor, true, commandExecutor);
+			if (targetsFromSelector == null) return;
 			targets = targetsFromSelector;
 		}
 		// Get item id and metadata

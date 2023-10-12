@@ -30,13 +30,9 @@ public class CommandListEntities extends Command {
 		// Get targets
 		String targetsString = "@e";
 		if (args.length == 2) targetsString = args[1];
-		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, targetsString, commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor, false);
+		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, targetsString, commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor, false, commandExecutor);
 		// Print a syntax error if there was a syntax error parsing the targets
-		if (targets == null) {
-			String message = StatCollector.translateToLocal("command.target_syntax_error");
-			commandExecutor.addChatMessage(message);
-			return;
-		}
+		if (targets == null) return;
 		// List targeted entities
 		for (Entity targetEntity: targets) {
 			if (targetEntity instanceof EntityPlayer) {

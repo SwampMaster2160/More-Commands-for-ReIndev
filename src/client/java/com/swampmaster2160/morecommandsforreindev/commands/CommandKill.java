@@ -34,13 +34,9 @@ public class CommandKill extends Command {
 			return;
 		}
 		// Get targets
-		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, args[1], commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor, false);
+		@Nullable Entity[] targets = EntityTargets.getTargetsFromSelectorString(world, args[1], commandExecutor.posX, commandExecutor.posY, commandExecutor.posZ, commandExecutor, false, commandExecutor);
 		// Print a syntax error if there was a syntax error parsing the targets
-		if (targets == null) {
-			String message = StatCollector.translateToLocal("command.target_syntax_error");
-			commandExecutor.addChatMessage(message);
-			return;
-		}
+		if (targets == null) return;
 		// Kill targeted entities
 		killEntities(commandExecutor, targets);
 	}

@@ -9,10 +9,12 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.src.client.player.EntityPlayerSP;
 import net.minecraft.src.game.entity.Entity;
 import net.minecraft.src.game.entity.EntityList;
+import net.minecraft.src.game.entity.player.EntityPlayer;
 import net.minecraft.src.game.level.World;
+import net.minecraft.src.game.stats.StatCollector;
 
 public abstract class EntityTargets {
-	public static @Nullable Entity[] getTargetsFromSelectorString(World world, String string, double x, double y, double z, Entity executerEntity, boolean playersOnly) {
+	public static @Nullable Entity[] getTargetsFromSelectorString(World world, String string, double x, double y, double z, Entity executerEntity, boolean playersOnly, EntityPlayer toPrintErrorTo) {
 		ArrayList<Object> tokensAndParsedObjects = new ArrayList<Object>();
 		// Loop over each char in the string to convert the string to tokens
 		@Nullable String currentToken = "";
@@ -32,7 +34,7 @@ public abstract class EntityTargets {
 			// If the next char should start a new token or we are at the end of the string then end the token
 			if (nextChar == null || nextChar == '(' || nextChar == ')' || nextChar == '!' || nextChar == '@' || nextChar == '#' || nextChar == '%' || EntityTargetBinaryOperator.isCharAnOperator(nextChar)) {
 				// If the token on its own can be converted to a list of entities then do so
-				@Nullable Object tokenFirstRoundEvaluation = evaluateSingleToken(world, currentToken, x, y, z, executerEntity);
+				@Nullable Object tokenFirstRoundEvaluation = evaluateSingleToken(world, currentToken, x, y, z, executerEntity, toPrintErrorTo);
 				// If there is an error then return
 				if (tokenFirstRoundEvaluation == null) return null;
 				// Add the tokens to the token list and create a new token
@@ -41,7 +43,7 @@ public abstract class EntityTargets {
 			}
 		}
 		// Parse all other unparsed tokens, if there is an error then return null
-		boolean hasError = evaluateTokens(world, tokensAndParsedObjects, 0, true);
+		boolean hasError = evaluateTokens(world, tokensAndParsedObjects, 0, true, toPrintErrorTo);
 		if (hasError) return null;
 		// Return the first token and should be only token
 		if (tokensAndParsedObjects.size() != 1) return null;
@@ -54,16 +56,17 @@ public abstract class EntityTargets {
 		return players.toArray(new Entity[] {});
 	}
 
-	public static boolean evaluateTokens(World world, ArrayList<Object> tokens, int startIndex, boolean isRoot) {
+	public static boolean evaluateTokens(World world, ArrayList<Object> tokens, int startIndex, boolean isRoot, EntityPlayer toPrintErrorTo) {
 		// Find brackets and recursively parse the content of the brackets
 		@Nullable Integer endIndex = null;
 		for (int index = startIndex; index < tokens.size(); index++) {
 			// Get token
 			Object token = tokens.get(index);
 			// Only the root evaluation should end without a closing bracket
-			if (index == tokens.size() - 1 && !isRoot) {
-				if (!(token instanceof String)) return true;
-				if (!((String)token).equals(")")) return true;
+			if (index == tokens.size() - 1 && !isRoot && (!(token instanceof String) || !((String)token).equals(")"))) {
+				String message = StatCollector.translateToLocal("entity_targets.too_many_closing_brackets");
+				toPrintErrorTo.addChatMessage(message);
+				return true;
 			}
 			// Skip tokens that have already been parsed
 			if (!(token instanceof String)) continue;
@@ -72,25 +75,38 @@ public abstract class EntityTargets {
 			if (tokenString.equals("(")) {
 				// Remove opening bracket
 				tokens.remove(index);
-				if (index == tokens.size()) return true;
+				if (index == tokens.size()) {
+					String message = StatCollector.translateToLocal("entity_targets.brackets_with_no_content");
+					toPrintErrorTo.addChatMessage(message);
+					return true;
+				}
 				// Evaluate bracketed area
-				boolean hasError = evaluateTokens(world, tokens, index, false);
+				boolean hasError = evaluateTokens(world, tokens, index, false, toPrintErrorTo);
 				if (hasError) return true;
 				// Remove end bracket
 				try {
 					// Remove bracket token
 					Object removed = tokens.remove(index + 1);
 					// It is an error if the removed token is not a bracket
-					if (!(removed instanceof String)) return true;
-					if (!(((String)removed).equals(")"))) return true;
+					if ((!(removed instanceof String) || !((String)removed).equals(")")) && (index == tokens.size() - 1 && !isRoot && (!(token instanceof String) || !((String)token).equals(")")))) {
+						String message = StatCollector.translateToLocal("entity_targets.too_many_opening_brackets");
+						toPrintErrorTo.addChatMessage(message);
+						return true;
+					}
 				}
 				catch (IndexOutOfBoundsException e) {
+					String message = StatCollector.translateToLocal("entity_targets.too_many_opening_brackets");
+					toPrintErrorTo.addChatMessage(message);
 					return true;
 				}
 			}
 			// Closing brackets should end the bracket content or be an error in the root evaluation
 			if (tokenString.equals(")")) {
-				if (isRoot) return true;
+				if (isRoot) {
+					String message = StatCollector.translateToLocal("entity_targets.too_many_closing_brackets");
+					toPrintErrorTo.addChatMessage(message);
+					return true;
+				}
 				endIndex = index + 1;
 				break;
 			}
@@ -106,13 +122,23 @@ public abstract class EntityTargets {
 			// Skip token if it is not a not operator
 			if (!tokenString.equals("!")) continue;
 			// Return if the operator is at the end of the parsing region
-			if (!(index < endIndex - 1)) return true;
+			if (!(index < endIndex - 1)) {
+				String message = StatCollector.translateToLocal("entity_targets.operator_used_on_not_expression")
+					.replace("%o", "!");
+				toPrintErrorTo.addChatMessage(message);
+				return true;
+			}
 			// Remove not operator
 			tokens.remove(index);
 			// Pop out the operand
 			Object nextToken = tokens.remove(index);
 			// Get the operand as an entity list. It is an error if it is not so.
-			if (!(nextToken instanceof Entity[])) return true;
+			if (!(nextToken instanceof Entity[])) {
+				String message = StatCollector.translateToLocal("entity_targets.operator_used_on_not_expression")
+					.replace("%o", "!");
+				toPrintErrorTo.addChatMessage(message);
+				return true;
+			}
 			Entity[] nextTokenEntities = (Entity[])nextToken;
 			// Get a list of all entities and create a result array;
 			List<Entity> allEntities = world.getLoadedEntityList();
@@ -152,14 +178,24 @@ public abstract class EntityTargets {
 				@Nullable EntityTargetBinaryOperator operator = operatorsForPriority.get(tokenChar);
 				if (operator == null) continue;
 				// Return if the operator is at the start or end of the parsing region
-				if (!(index > startIndex && index < endIndex - 1)) return true;
+				if (!(index > startIndex && index < endIndex - 1)) {
+					String message = StatCollector.translateToLocal("entity_targets.operator_used_on_not_expression")
+						.replace("%o", (String)token);
+					toPrintErrorTo.addChatMessage(message);
+					return true;
+				}
 				// Remove the operator token and point to the first operand of the operator
 				tokens.remove(index);
 				index--;
 				// Pop out the operands and make sure they are entitity lists. It is an error if they are not.
 				Object operandA = tokens.remove(index);
 				Object operandB = tokens.remove(index);
-				if (!((operandA instanceof Entity[]) && (operandB instanceof Entity[]))) return true;
+				if (!((operandA instanceof Entity[]) && (operandB instanceof Entity[]))) {
+					String message = StatCollector.translateToLocal("entity_targets.operator_used_on_not_expression")
+						.replace("%o", (String)token);
+					toPrintErrorTo.addChatMessage(message);
+					return true;
+				}
 				// Preform the operation and add it back to the list
 				Entity[] result = operator.getResult(world, (Entity[])operandA, (Entity[])operandB);
 				tokens.add(index, result);
@@ -183,13 +219,18 @@ public abstract class EntityTargets {
 	 * null if there is an error converting the token.
 	 * The input string if the input string cannot be converted.
 	 */
-	public static @Nullable Object evaluateSingleToken(World world, String token, double x, double y, double z, @Nullable Entity executerEntity) {
+	public static @Nullable Object evaluateSingleToken(World world, String token, double x, double y, double z, @Nullable Entity executerEntity, EntityPlayer toPrintErrorTo) {
 		// Tokens starting with @ are target selectors
 		if (token.startsWith("@")) {
 			String tokenWithoutPrefix = token.substring(1);
 			// Get the selector
 			EntityTargetSelector targetSelector = EntityTargetSelector.getRegisteredTargetSelector(tokenWithoutPrefix);
-			if (targetSelector == null) return null;
+			if (targetSelector == null) {
+				String message = StatCollector.translateToLocal("entity_targets.invalid_target_selector")
+					.replace("%t", token);
+				toPrintErrorTo.addChatMessage(message);
+				return null;
+			}
 			// Get entities that it selects
 			return targetSelector.getSelectedEntities(world, x, y, z, executerEntity);
 		}
@@ -202,13 +243,16 @@ public abstract class EntityTargets {
 				entityInstanceId = Integer.parseInt(tokenWithoutPrefix);
 			}
 			catch (NumberFormatException e) {
+				String message = StatCollector.translateToLocal("entity_targets.instance_selector_not_int")
+					.replace("%t", token);
+				toPrintErrorTo.addChatMessage(message);
 				return null;
 			}
 			// Get the entity with the id
 			for (Entity entity: world.getLoadedEntityList()) {
 				if (entity.entityId == entityInstanceId) return new Entity[] { entity };
 			}
-			return null;
+			return new Entity[] {};
 		}
 		// Tokens starting with % select an entity by its entity name/id
 		if (token.startsWith("%")) {
@@ -235,7 +279,7 @@ public abstract class EntityTargets {
 		}
 		// Else get the player by that name
 		@Nullable Entity player = world.getPlayerEntityByName(token);
-		if (player == null) return null;
+		if (player == null) return new Entity[] { };
 		return new Entity[] { player };
 	}
 }
